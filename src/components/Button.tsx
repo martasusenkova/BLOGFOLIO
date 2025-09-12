@@ -1,19 +1,39 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
 interface IButton {
   variant: 'Primary' | 'Secondary' | 'Secondary2';
   text: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const Button: FC<IButton> = ({ variant, text }) => {
-  return <ButtonComponent $variant={variant}>{text}</ButtonComponent>;
+const Button: FC<IButton> = ({ variant, text, onClick }) => {
+  const [isActive, setIsActive] = useState(false);
+
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    setIsActive(true);
+
+    if (onClick) {
+      onClick(e);
+    }
+  };
+
+  return (
+    <ButtonComponent
+      $variant={variant}
+      $isActive={isActive}
+      onClick={handleClick}
+    >
+      {text}
+    </ButtonComponent>
+  );
 };
 
 export default Button;
 
 const ButtonComponent = styled.button<{
   $variant: 'Primary' | 'Secondary' | 'Secondary2';
+  $isActive: boolean;
 }>`
   font-size: 14px;
   font-weight: bold;
@@ -24,74 +44,31 @@ const ButtonComponent = styled.button<{
   border-radius: 2px;
   cursor: pointer;
 
-  ${({ $variant }) => {
+  ${({ $variant, $isActive }) => {
     switch ($variant) {
       case 'Primary':
         return `
-          background-color:rgb(14, 49, 176);
-            color: white;
-
-     &:hover {
-            background-color: rgb(113, 134, 208);
-          }
-          &:active {
-      background-color:rgb(217, 217, 217);
-                color:rgb(108, 108, 108) ;
-
-
-            transform: scale(0.97);
-          }
+          background-color: ${$isActive ? 'rgb(217, 217, 217)' : 'rgb(14, 49, 176)'};
+          color: ${$isActive ? 'rgb(108, 108, 108)' : 'white'};
+          ${$isActive ? 'transform: scale(0.97);' : ''}
         `;
       case 'Secondary':
         return `
-          background-color:rgb(240, 241, 241);
-            color: black;
-
-            &:hover {
-                      background-color:rgb(209, 211, 211);
-            }
-
-       &:active {
-      background-color:rgb(217, 217, 217);
-                color:rgb(108, 108, 108) ;
-
-
-            transform: scale(0.97);
-          }
+          background-color: ${$isActive ? 'rgb(217, 217, 217)' : 'rgb(240, 241, 241)'};
+          color: ${$isActive ? 'rgb(108, 108, 108)' : 'black'};
+          ${$isActive ? 'transform: scale(0.97);' : ''}
         `;
       case 'Secondary2':
         return `
           background-color: transparent;
-            color: red;
-                  &:hover {
-                       border: 1px solid rgb(209, 211, 211);
-
-            }
-
-       &:active {
-                color:rgb(108, 108, 108) ;
-  border: none;
-
-
-            transform: scale(0.97);
-          }
-
+          color: ${$isActive ? 'rgb(108, 108, 108)' : 'red'};
+          border: ${$isActive ? 'none' : '1px solid rgb(209, 211, 211)'};
+          ${$isActive ? 'transform: scale(0.97);' : ''}
         `;
       default:
         return `
           background-color: black;
-            color: white;
-      &:hover {
-                      background-color:rgb(209, 211, 211);
-            }
-
-       &:active {
-      background-color:rgb(217, 217, 217);
-                color:rgb(108, 108, 108) ;
-
-
-            transform: scale(0.97);
-          }
+          color: white;
         `;
     }
   }}
