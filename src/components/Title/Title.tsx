@@ -6,12 +6,12 @@ interface TitleProps {
 }
 
 const Title: FC<TitleProps> = ({ text }) => (
-  <SignInComponent>{text}</SignInComponent>
+  <TitleComponent>{text}</TitleComponent>
 );
 
 export default Title;
 
-const SignInComponent = styled.p`
+const TitleComponent = styled.p`
   font-size: 20px;
   font-weight: bold;
   color: black;

@@ -5,7 +5,7 @@ interface IBurger {
   size?: number;
 }
 
-const Burger: FC<IBurger> = ({ size = 35 }) => {
+const BurgerMenu: FC<IBurger> = ({ size = 35 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleBurger = () => setIsOpen(!isOpen);
@@ -51,4 +51,4 @@ const Line = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
-export default Burger;
+export default BurgerMenu;
