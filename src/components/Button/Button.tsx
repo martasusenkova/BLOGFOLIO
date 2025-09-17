@@ -5,9 +5,10 @@ interface IButton {
   variant: 'Primary' | 'Secondary' | 'Secondary2';
   text: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  width?: string;
 }
 
-const Button: FC<IButton> = ({ variant, text, onClick }) => {
+const Button: FC<IButton> = ({ variant, text, onClick, width }) => {
   const [isActive, setIsActive] = useState(false);
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -22,6 +23,7 @@ const Button: FC<IButton> = ({ variant, text, onClick }) => {
     <ButtonComponent
       $variant={variant}
       $isActive={isActive}
+      $width={width}
       onClick={handleClick}
     >
       {text}
@@ -34,15 +36,21 @@ export default Button;
 const ButtonComponent = styled.button<{
   $variant: 'Primary' | 'Secondary' | 'Secondary2';
   $isActive: boolean;
+  $width?: string;
 }>`
   font-size: 14px;
   font-weight: bold;
+  margin: 10px auto 0;
+  padding: 10px 12px;
   display: flex;
-  margin: 10px auto;
-  padding: 10px 20px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
   border: none;
   border-radius: 2px;
   cursor: pointer;
+  width: ${({ $width }) => $width || 'auto'};
 
   ${({ $variant, $isActive }) => {
     switch ($variant) {

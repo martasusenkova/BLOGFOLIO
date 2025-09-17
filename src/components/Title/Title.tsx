@@ -1,20 +1,23 @@
-import React, { FC } from 'react';
 import styled from 'styled-components';
+import React, { FC } from 'react';
 
 interface TitleProps {
   text: string;
 }
 
-const Title: FC<TitleProps> = ({ text }) => (
-  <TitleComponent>{text}</TitleComponent>
-);
+const Title: FC<TitleProps> = ({ text }) => {
+  return <StyledTitle>{text}</StyledTitle>;
+};
 
 export default Title;
 
-const TitleComponent = styled.p`
-  font-size: 20px;
-  font-weight: bold;
-  color: black;
+const StyledTitle = styled.h2`
+  color: ${({ theme }) => theme.text};
+  font-weight: 900;
+  font-size: 40px;
   display: flex;
-  margin: 10px auto;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  align-self: flex-start;
 `;

@@ -25,12 +25,9 @@ export const Tabs: FC<TabsProps> = ({
       {tabs.map((tab) => (
         <TabButton
           key={tab.value}
-          onClick={() =>
-            !disabled && !(tab.disabled ?? false) && onTabChange(tab.value)
-          }
           $isActive={tab.value === activeTab}
-          $isDisabled={disabled || (tab.disabled ?? false)}
-          disabled={tab.disabled}
+          $isDisabled={tab.disabled || false}
+          onClick={() => !tab.disabled && onTabChange(tab.value)}
         >
           {tab.label}
         </TabButton>
@@ -42,9 +39,11 @@ export const Tabs: FC<TabsProps> = ({
 const TabsContainer = styled.div`
   display: flex;
   position: relative;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid ${({ theme }) => theme.cardBorder};
   margin: 10px;
+  width: 100%;
 `;
+
 const TabButton = styled.button<{ $isActive: boolean; $isDisabled: boolean }>`
   background-color: transparent;
   border: none;
@@ -55,21 +54,22 @@ const TabButton = styled.button<{ $isActive: boolean; $isDisabled: boolean }>`
   position: relative;
   transition: color 0.3s ease;
   font-weight: bold;
-  color: ${({ $isDisabled, $isActive }) => {
-    if ($isDisabled) return '#ccc';
-    if ($isActive) return '#000';
-    return '#050505';
+
+  color: ${({ $isDisabled, $isActive, theme }) => {
+    if ($isDisabled) return theme.cardBorder;
+    if ($isActive) return theme.text;
+    return theme.text;
   }};
 
-  ${({ $isDisabled }) =>
+  ${({ $isDisabled, theme }) =>
     !$isDisabled &&
     css`
       &:hover {
-        color: #1717e9;
+        color: rgb(0, 0, 255);
       }
     `}
 
-  ${({ $isActive }) =>
+  ${({ $isActive, theme }) =>
     $isActive &&
     css`
       &::after {
@@ -79,7 +79,7 @@ const TabButton = styled.button<{ $isActive: boolean; $isDisabled: boolean }>`
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: #000;
+        background-color: ${theme.text};
       }
     `}
 `;

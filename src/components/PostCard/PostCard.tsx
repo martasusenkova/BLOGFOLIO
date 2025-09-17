@@ -174,13 +174,13 @@ const Title = styled.h3<{ $variant: string }>`
 const Text = styled.p`
   font-size: 16px;
   line-height: 150%;
-  color: #444;
+  color: ${({ theme }) => theme.text};
   margin-bottom: 12px;
 `;
 
 const Divider = styled.hr`
   border: none;
-  border-top: 1px solid #d1d1d1;
+  border-top: 1px solid ${({ theme }) => theme.cardBorder};
   margin: 10px 5px;
 `;
 
@@ -191,19 +191,19 @@ const Footer = styled.div`
   padding: 8px 16px;
 `;
 
-const ActionsLeft = styled.div`
+export const ActionsLeft = styled.div`
   display: flex;
   gap: 12px;
 `;
 
-const ActionsRight = styled.div`
+export const ActionsRight = styled.div`
   display: flex;
   gap: 12px;
 `;
-const MirroredIcon = styled(FontAwesomeIcon)`
+export const MirroredIcon = styled(FontAwesomeIcon)`
   transform: scaleX(-1);
 `;
-const IconBtn = styled.button`
+export const IconBtn = styled.button`
   background: none;
   display: flex;
   flex-direction: row-reverse;
@@ -211,10 +211,10 @@ const IconBtn = styled.button`
   cursor: pointer;
   font-size: 16px;
   font-weight: 900;
-  color: #0b0b0b;
+  color: ${({ theme }) => theme.text};
 
   &:hover {
-    color: black;
+    color: ${({ theme }) => theme.text};
   }
 `;
 const LikesWrapper = styled.div`
@@ -225,5 +225,5 @@ const LikesWrapper = styled.div`
 
 const LikesCount = styled.span`
   font-size: 14px;
-  color: #000000;
+  color: ${({ theme }) => theme.text};
 `;

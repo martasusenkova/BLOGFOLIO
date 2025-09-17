@@ -46,15 +46,16 @@ export const StyledInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  align-items: flex-start;
 `;
 
 export const Label = styled.label`
   font-weight: bold;
-  color: #333;
+  color: ${({ theme }) => theme.text};
 `;
 
 export const ErrorText = styled.p`
-  color: red;
+  color: ${({ theme }) => theme.error};
   font-size: 12px;
   margin: -4px 0 0;
 `;
@@ -63,13 +64,17 @@ export const StyledInput = styled.input<{ $hasError: boolean }>`
   padding: 8px 12px;
   font-size: 16px;
   border-radius: 2px;
-  border: 0 solid #8a8a8a;
+  border: ${({ theme }) => (theme.text === '#ffffff' ? '1px' : '0')} solid
+    ${({ theme }) => theme.inputBorder};
   outline: none;
-  width: 250px;
-
+  width: 340px;
+  background-color: ${({ theme }) => theme.inputBackground};
+  color: ${({ theme }) => theme.text};
+  box-sizing: border-box;
   &:focus {
-    border: 1px solid #8a8a8a;
+    border: 1px solid ${({ theme }) => theme.text};
   }
+
   &:active {
     border: 0;
   }
@@ -79,43 +84,49 @@ export const StyledInput = styled.input<{ $hasError: boolean }>`
     !$hasError &&
     css`
       &:hover {
-        border: 1px solid #555;
+        border: 1px solid ${({ theme }) => theme.text};
       }
       &:active {
         border: 0;
       }
     `}
 
-  ${({ $hasError }) =>
+  ${({ $hasError, theme }) =>
     $hasError &&
     css`
-      border-color: red;
+      border-color: ${theme.error};
       &:focus {
-        border-color: red;
+        border-color: ${theme.error};
       }
     `}
-
-  ${({ disabled }) =>
+  
+  ${({ disabled, theme }) =>
     disabled &&
     css`
-      background-color: #f2f2f2;
-      color: #999;
+      background-color: ${theme.disabledBackground};
+      color: ${theme.disabledText};
       cursor: not-allowed;
-      border-color: #d3d3d3;
+      border-color: ${theme.disabledBorder};
     `}
 `;
 
 export const InputGrid = styled.div`
-  background-color: rgb(224, 224, 224);
+  background-color: ${({ theme }) => theme.background};
+  border-color: ${({ theme }) => theme.cardBorder};
   padding: 32px;
+  border: 1px solid;
   display: flex;
   flex-direction: column;
   gap: 24px;
   width: fit-content;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto 40px;
 `;
 
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
+  color: ${({ theme }) => theme.text};
 `;

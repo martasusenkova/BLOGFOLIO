@@ -1,91 +1,71 @@
 import React, { useState } from 'react';
-import User from './components/User';
-import Title from './components/Title';
-import Button from './components/Button';
-import BurgerMenu from './components/BurgerMenu';
-import { Input, InputContainer, InputGrid } from './components/Input';
-import Textarea from './components/Textarea';
-import { Tabs } from './components/Tabs';
-import PostList from './components/PostList';
+import styled, { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from './components/ThemeToggle';
+import BlogList from './components/Pages/BlogList';
+import SignUp from './components/Pages/SignUp';
+import Template from './components/Pages/Template';
+import PostPage from './components/Pages/PostPage';
+import SignIn from './components/Pages/SignIn';
+import Success from './components/Pages/Success';
+import RegistrationConfirmation from './components/Pages/RegistrationConfirmation';
+import Hw_39 from './components/Pages/Hw_39';
 
 function App() {
-  const [defaultText, setDefaultText] = useState('');
-  const [activeText, setActiveText] = useState('Text');
-  const [disabledText, setDisabledText] = useState('Text');
-  const [errorText, setErrorText] = useState('Text');
-  const [textareaValue, setTextareaValue] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
+  const [isDark, setIsDark] = useState(false);
 
-  const tabsData = [
-    { label: 'All', value: 'all' },
-    { label: 'My favorites', value: 'my-favorites' },
-    { label: 'Popular', value: 'popular', disabled: true },
-  ];
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+  };
+
+  const currentTheme = isDark ? darkTheme : lightTheme;
 
   return (
-    <>
-      <Tabs tabs={tabsData} activeTab={activeTab} onTabChange={setActiveTab} />
-      <InputGrid>
-        <InputContainer>
-          <Input
-            type="text"
-            label="Title"
-            value={defaultText}
-            onChange={setDefaultText}
-            placeholder="Placeholder"
-          />
-          DEFAULT
-        </InputContainer>
-        <InputContainer>
-          <Input
-            type="email"
-            label="Title"
-            value={defaultText}
-            onChange={setDefaultText}
-            placeholder="Placeholder"
-          />
-          FOCUS
-        </InputContainer>
-        <InputContainer>
-          <Input label="Title" value={activeText} onChange={setActiveText} />
-          ACTIVE{' '}
-        </InputContainer>
-        <InputContainer>
-          <Input
-            type="password"
-            label="Title"
-            value={disabledText}
-            onChange={setDisabledText}
-            disabled={true}
-          />
-          DISABLED{' '}
-        </InputContainer>
-        <InputContainer>
-          <Input
-            label="Title"
-            value={errorText}
-            onChange={setErrorText}
-            error={true}
-            errorText="Error text"
-          />
-          ERROR{' '}
-        </InputContainer>
-
-        <Textarea
-          label="Text"
-          value={textareaValue}
-          onChange={setTextareaValue}
+    <ThemeProvider theme={currentTheme}>
+      <Wrapper>
+        <Hw_39
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
+        ></Hw_39>
+        <Template
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
+        ></Template>
+        <BlogList
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
         />
-      </InputGrid>
-      <User username="Marta Susenkova" />
-      <Title text="Sign In" />
-      <BurgerMenu></BurgerMenu>
-      <Button variant="Primary" text="Primary"></Button>
-      <Button variant="Secondary" text="Secondary"></Button>
-      <Button variant="Secondary2" text="Secondary 2"></Button>
-      <PostList />
-    </>
+        <SignUp
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
+        />{' '}
+        <RegistrationConfirmation
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
+        ></RegistrationConfirmation>
+        <Success
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
+        ></Success>
+        <SignIn
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
+        ></SignIn>
+        <PostPage
+          onThemeToggle={toggleTheme}
+          currentTheme={isDark ? 'dark' : 'light'}
+        ></PostPage>
+      </Wrapper>
+    </ThemeProvider>
   );
 }
 
 export default App;
+
+const Wrapper = styled.div`
+  background-color: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text};
+  min-height: 100vh;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+`;

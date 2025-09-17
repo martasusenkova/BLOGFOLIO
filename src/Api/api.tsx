@@ -26,3 +26,16 @@ export const fetchPosts = async (): Promise<IPost[]> => {
     throw error;
   }
 };
+
+export const fetchPostsFull = async (): Promise<IPost[]> => {
+  try {
+    const response = await fetch(
+      'https://studapi.teachmeskills.by/blog/posts/?limit=12&search=astronaut'
+    );
+    const data: ApiResponse = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error('Ошибка при загрузке постов:', error);
+    throw error;
+  }
+};

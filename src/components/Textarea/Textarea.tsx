@@ -38,7 +38,7 @@ const StyledTextareaWrapper = styled.div`
 
 const Label = styled.label`
   font-weight: bold;
-  color: #333;
+  color: ${({ theme }) => theme.text};
 `;
 
 const StyledTextarea = styled.textarea`
@@ -47,11 +47,17 @@ const StyledTextarea = styled.textarea`
   padding: 8px 12px;
   font-size: 16px;
   border-radius: 2px;
-  border: 0 solid #8a8a8a;
+  color: ${({ theme }) => theme.text};
+  border-color: ${({ theme }) => theme.inputBorder};
+  background-color: ${({ theme }) => theme.inputBackground};
+
+  border: ${({ theme }) => (theme.text === '#ffffff' ? '1px' : '0')} solid
+    ${({ theme }) => theme.inputBorder};
   outline: none;
   resize: none;
 
   &:focus {
-    border: 1px solid #626161;
+    border: 1px solid;
+    border-color: ${({ theme }) => theme.cardBorder};
   }
 `;
