@@ -76,12 +76,10 @@ const SignUp: React.FC = () => {
 
           {error && <ErrorText>{error}</ErrorText>}
 
-          <Button
-            variant="Primary"
-            text="Sign Up"
-            width="340px"
-            type="submit"
-          />
+          <Button variant="Primary" width="340px" type="submit">
+            {' '}
+            Sign Up{' '}
+          </Button>
           <StyledLink>
             Already have an account? <a href="/">Sign in</a>
           </StyledLink>

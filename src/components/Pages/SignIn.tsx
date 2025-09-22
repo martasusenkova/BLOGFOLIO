@@ -44,12 +44,9 @@ const SignIn: React.FC = () => {
             <a href="/">Forgot password?</a>
           </ForgotLink>
 
-          <Button
-            variant="Primary"
-            text="Sign In"
-            width="340px"
-            type="submit"
-          />
+          <Button variant="Primary" width="340px" type="submit">
+            Sign In
+          </Button>
 
           <ForgotLinkTwo>
             Don't have an account? <a href="/">Sign Up</a>

@@ -8,7 +8,9 @@ const Success: React.FC = () => {
     <FormTemplate title="Success" showBackButton={true}>
       <ContentContainer>
         Your email confirmed
-        <Button variant="Primary" text="Go Home" width="340px"></Button>
+        <Button variant="Primary" width="340px">
+          Go Home
+        </Button>
       </ContentContainer>
     </FormTemplate>
   );

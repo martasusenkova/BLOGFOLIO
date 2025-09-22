@@ -26,9 +26,9 @@ const HW_39: React.FC = () => {
 
       <User username="Marta Susenkova" />
 
-      <Button variant="Primary" text="Primary" />
-      <Button variant="Secondary" text="Secondary" />
-      <Button variant="Secondary2" text="Secondary 2" />
+      <Button variant="Primary">Primary</Button>
+      <Button variant="Secondary">Secondary</Button>
+      <Button variant="Secondary2">Secondary 2</Button>
 
       <InputGrid>
         <InputContainer>

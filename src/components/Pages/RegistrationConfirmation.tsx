@@ -16,7 +16,10 @@ const RegistrationConfirmation: React.FC = () => {
           </p>
           <p>Go to your email@email.com and confirm it.</p>
         </ConfirmationMessage>
-        <Button variant="Primary" text="Go Home" width="340px" />
+        <Button variant="Primary" width="340px">
+          {' '}
+          Go Home
+        </Button>
       </ContentContainer>
     </FormTemplate>
   );

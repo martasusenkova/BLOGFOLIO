@@ -1,34 +1,45 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
 
+type ButtonVariant =
+  | 'Primary'
+  | 'Secondary'
+  | 'Secondary2'
+  | 'IconWithText'
+  | 'Icon';
+
 interface IButton {
-  variant: 'Primary' | 'Secondary' | 'Secondary2';
-  text?: string;
+  variant: ButtonVariant;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   width?: string;
   height?: string;
   type?: 'button' | 'submit' | 'reset';
-  children?: React.ReactNode;
+  children: React.ReactNode;
+  isLiked?: boolean;
+  isDisliked?: boolean;
 }
 
 const Button: FC<IButton> = ({
   variant,
-  text,
   onClick,
   width,
   height,
   type = 'button',
   children,
+  isLiked,
+  isDisliked,
 }) => {
   return (
     <ButtonComponent
       $variant={variant}
       $width={width}
       $height={height}
+      $isLiked={isLiked}
+      $isDisliked={isDisliked}
       type={type}
       onClick={onClick}
     >
-      {text} {children}
+      {children}
     </ButtonComponent>
   );
 };
@@ -36,9 +47,11 @@ const Button: FC<IButton> = ({
 export default Button;
 
 const ButtonComponent = styled.button<{
-  $variant: 'Primary' | 'Secondary' | 'Secondary2';
+  $variant: ButtonVariant;
   $width?: string;
   $height?: string;
+  $isLiked?: boolean;
+  $isDisliked?: boolean;
 }>`
   font-size: 14px;
   font-weight: bold;
@@ -54,6 +67,7 @@ const ButtonComponent = styled.button<{
   height: ${({ $height }) => $height || 'auto'};
   border: none;
   transition: all 0.2s ease;
+
   svg {
     width: 16px;
     height: 16px;
@@ -61,7 +75,7 @@ const ButtonComponent = styled.button<{
     margin: 0 6px;
   }
 
-  ${({ $variant }) => {
+  ${({ $variant, $isLiked, $isDisliked }) => {
     switch ($variant) {
       case 'Primary':
         return css`
@@ -105,16 +119,65 @@ const ButtonComponent = styled.button<{
           &:active {
             background-color: rgb(217, 217, 217);
             color: rgb(108, 108, 108);
-            border: none;
-            transform: scale(0.97);
             border: 0;
+            transform: scale(0.97);
+          }
+        `;
+      case 'IconWithText':
+        return css`
+          background-color: rgb(217, 217, 217);
+          color: rgb(108, 108, 108);
+
+          &:hover {
+            background-color: rgb(189, 189, 189);
+            color: black;
+          }
+
+          &:disabled {
+            background-color: rgb(240, 240, 240);
+            color: rgb(190, 190, 190);
+          }
+        `;
+      case 'Icon':
+        return css`
+          background-color: rgb(217, 217, 217);
+          color: rgb(108, 108, 108);
+          padding: 8px;
+
+          &:hover {
+            ${$isLiked &&
+            css`
+              background-color: rgb(20, 60, 200);
+              color: white;
+            `}
+            ${$isDisliked &&
+            css`
+              background-color: red;
+              color: white;
+            `}
+      ${!$isLiked &&
+            !$isDisliked &&
+            css`
+              background-color: rgb(189, 189, 189);
+              color: black;
+            `}
+          }
+
+          &:disabled {
+            background-color: rgb(240, 240, 240);
+            color: rgb(190, 190, 190);
+            cursor: not-allowed;
+          }
+
+          &:active {
+            transform: scale(0.97);
           }
         `;
 
       default:
         return css`
-          background-color: black;
-          color: white;
+          background-color: #fffdfd;
+          color: #000000;
         `;
     }
   }}

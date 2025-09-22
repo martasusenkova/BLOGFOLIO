@@ -11,12 +11,7 @@ import {
   faBookmark,
 } from '@fortawesome/free-regular-svg-icons';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import {
-  ActionsLeft,
-  ActionsRight,
-  MirroredIcon,
-  IconBtn,
-} from '../PostCard/PostCard';
+import { ActionsLeft, ActionsRight, MirroredIcon } from '../PostCard/PostCard';
 
 import { PageButton, PageNav } from './BlogList';
 
@@ -55,8 +50,8 @@ const PostPage: React.FC = () => {
         <ActionsContainer>
           <ActionsLeft>
             <Button
-              variant="Secondary"
-              text=""
+              variant="Icon"
+              isLiked={true}
               onClick={() => console.log('Like clicked')}
               width="40px"
               height="40px"
@@ -65,8 +60,8 @@ const PostPage: React.FC = () => {
             </Button>
 
             <Button
-              variant="Secondary"
-              text=""
+              variant="Icon"
+              isDisliked={true}
               onClick={() => console.log('Dislike clicked')}
               width="40px"
               height="40px"
@@ -76,9 +71,8 @@ const PostPage: React.FC = () => {
           </ActionsLeft>
           <ActionsRight>
             <Button
-              variant="Secondary"
-              text=""
-              onClick={() => console.log('Like clicked')}
+              variant="IconWithText"
+              onClick={() => console.log('Add to bookmark clicked')}
               height="40px"
             >
               {' '}
