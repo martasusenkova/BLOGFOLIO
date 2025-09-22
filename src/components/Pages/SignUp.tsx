@@ -40,6 +40,7 @@ const SignUp: React.FC = () => {
               placeholder="Your name"
               value={name}
               onChange={setName}
+              autoComplete="name"
             />
           </InputContainer>
           <InputContainer>
@@ -49,6 +50,7 @@ const SignUp: React.FC = () => {
               placeholder="Your email"
               value={email}
               onChange={setEmail}
+              autoComplete="email"
             />
           </InputContainer>
           <InputContainer>
@@ -58,6 +60,7 @@ const SignUp: React.FC = () => {
               placeholder="Your password"
               value={password}
               onChange={setPassword}
+              autoComplete="new-password"
             />
           </InputContainer>
           <InputContainer>
@@ -67,6 +70,7 @@ const SignUp: React.FC = () => {
               placeholder="Confirm password"
               value={confirmPassword}
               onChange={setConfirmPassword}
+              autoComplete="new-password"
             />
           </InputContainer>
 
@@ -79,7 +83,7 @@ const SignUp: React.FC = () => {
             type="submit"
           />
           <StyledLink>
-            Already have an account? <p>Sign in</p>
+            Already have an account? <a href="/">Sign in</a>
           </StyledLink>
         </InputGrid>
       </form>
@@ -89,12 +93,12 @@ const SignUp: React.FC = () => {
 
 export default SignUp;
 
-export const StyledLink = styled.div`
+export const StyledLink = styled.p`
+  all: unset;
   margin: 20px 0;
   font-size: 14px;
   color: ${({ theme }) => theme.text};
-
-  p {
+  a {
     color: ${({ theme }) => theme.primary};
     text-decoration: none;
     cursor: pointer;

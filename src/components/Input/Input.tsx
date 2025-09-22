@@ -2,14 +2,15 @@ import React, { FC, ChangeEvent } from 'react';
 import styled, { css } from 'styled-components';
 
 interface InputProps {
+  label: string;
+  type?: string;
   value: string;
   onChange: (value: string) => void;
-  label: string;
   placeholder?: string;
-  type?: 'text' | 'email' | 'password';
-  disabled?: boolean;
   error?: boolean;
   errorText?: string;
+  disabled?: boolean;
+  autoComplete?: string;
 }
 
 export const Input: FC<InputProps> = ({
@@ -21,6 +22,7 @@ export const Input: FC<InputProps> = ({
   disabled = false,
   error = false,
   errorText = '',
+  autoComplete,
 }) => {
   return (
     <StyledInputWrapper>
@@ -34,6 +36,7 @@ export const Input: FC<InputProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         $hasError={error}
+        autoComplete={autoComplete}
       />
       {error && errorText && <ErrorText>{errorText}</ErrorText>}
     </StyledInputWrapper>

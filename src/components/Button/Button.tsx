@@ -3,10 +3,12 @@ import styled, { css } from 'styled-components';
 
 interface IButton {
   variant: 'Primary' | 'Secondary' | 'Secondary2';
-  text: string;
+  text?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   width?: string;
+  height?: string;
   type?: 'button' | 'submit' | 'reset';
+  children?: React.ReactNode;
 }
 
 const Button: FC<IButton> = ({
@@ -14,16 +16,19 @@ const Button: FC<IButton> = ({
   text,
   onClick,
   width,
+  height,
   type = 'button',
+  children,
 }) => {
   return (
     <ButtonComponent
       $variant={variant}
       $width={width}
+      $height={height}
       type={type}
       onClick={onClick}
     >
-      {text}
+      {text} {children}
     </ButtonComponent>
   );
 };
@@ -33,6 +38,7 @@ export default Button;
 const ButtonComponent = styled.button<{
   $variant: 'Primary' | 'Secondary' | 'Secondary2';
   $width?: string;
+  $height?: string;
 }>`
   font-size: 14px;
   font-weight: bold;
@@ -45,8 +51,15 @@ const ButtonComponent = styled.button<{
   border-radius: 2px;
   cursor: pointer;
   width: ${({ $width }) => $width || 'auto'};
+  height: ${({ $height }) => $height || 'auto'};
   border: none;
   transition: all 0.2s ease;
+  svg {
+    width: 16px;
+    height: 16px;
+    color: inherit;
+    margin: 0 6px;
+  }
 
   ${({ $variant }) => {
     switch ($variant) {
@@ -67,11 +80,11 @@ const ButtonComponent = styled.button<{
         `;
       case 'Secondary':
         return css`
-          background-color: rgb(240, 241, 241);
+          background-color: rgb(220, 220, 220);
           color: black;
 
           &:hover {
-            background-color: rgb(225, 226, 226);
+            background-color: rgb(189, 189, 189);
           }
 
           &:active {

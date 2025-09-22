@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Button from '../Button';
 import { IPost } from '../PostCard';
 import { fetchPostsFull } from '../../Api/api';
 import FormTemplate from './FormTemplate';
@@ -53,15 +54,36 @@ const PostPage: React.FC = () => {
         <Content dangerouslySetInnerHTML={{ __html: post.text }} />
         <ActionsContainer>
           <ActionsLeft>
-            <FontAwesomeIcon icon={faThumbsUp} />
-            <MirroredIcon icon={faThumbsDown} />
+            <Button
+              variant="Secondary"
+              text=""
+              onClick={() => console.log('Like clicked')}
+              width="40px"
+              height="40px"
+            >
+              <FontAwesomeIcon icon={faThumbsUp} />
+            </Button>
+
+            <Button
+              variant="Secondary"
+              text=""
+              onClick={() => console.log('Dislike clicked')}
+              width="40px"
+              height="40px"
+            >
+              <MirroredIcon icon={faThumbsDown} />
+            </Button>
           </ActionsLeft>
           <ActionsRight>
-            <IconBtn>
+            <Button
+              variant="Secondary"
+              text=""
+              onClick={() => console.log('Like clicked')}
+              height="40px"
+            >
               {' '}
-              Add to bookmarks
-              <FontAwesomeIcon icon={faBookmark} />
-            </IconBtn>
+              <FontAwesomeIcon icon={faBookmark} /> Add to bookmarks
+            </Button>
           </ActionsRight>
         </ActionsContainer>
         <PageNav>

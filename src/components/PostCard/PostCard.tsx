@@ -1,5 +1,7 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
+import Button from '../Button';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faThumbsUp,
@@ -65,9 +67,15 @@ export const PostCard: FC<PostCardProps> = ({
               <MirroredIcon icon={faThumbsDown} />
             </ActionsLeft>
             <ActionsRight>
-              <IconBtn>
+              <Button
+                variant="Secondary"
+                text=""
+                onClick={() => console.log('Like clicked')}
+                height="40px"
+              >
+                {' '}
                 <FontAwesomeIcon icon={faBookmark} />
-              </IconBtn>
+              </Button>
               <IconBtn>⋯</IconBtn>
             </ActionsRight>
           </Footer>

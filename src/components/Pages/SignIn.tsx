@@ -9,40 +9,60 @@ const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log({ email, password });
+  };
+
   return (
     <FormTemplate title="Sign In" showBackButton={true}>
-      <StyledIntputGrid>
-        <InputContainer>
-          <Input
-            label="Email"
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={setEmail}
+      <form onSubmit={handleSubmit}>
+        <StyledInputGrid>
+          <InputContainer>
+            <Input
+              label="Email"
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={setEmail}
+              autoComplete="email"
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              label="Password"
+              type="password"
+              placeholder="Your password"
+              value={password}
+              onChange={setPassword}
+              autoComplete="current-password"
+            />
+          </InputContainer>
+
+          <ForgotLink>
+            {' '}
+            <a href="/">Forgot password?</a>
+          </ForgotLink>
+
+          <Button
+            variant="Primary"
+            text="Sign In"
+            width="340px"
+            type="submit"
           />
-        </InputContainer>
-        <InputContainer>
-          <Input
-            label="Password"
-            type="password"
-            placeholder="Your password"
-            value={password}
-            onChange={setPassword}
-          />
-        </InputContainer>
-        <ForgotLink>Forgot password?</ForgotLink>
-        <Button variant="Primary" text="Sign In" width="340px"></Button>
-        <ForgotLinkTwo>
-          Don't have an account? <p>Sign Up</p>
-        </ForgotLinkTwo>
-      </StyledIntputGrid>
+
+          <ForgotLinkTwo>
+            Don't have an account? <a href="/">Sign Up</a>
+          </ForgotLinkTwo>
+        </StyledInputGrid>
+      </form>
     </FormTemplate>
   );
 };
 
 export default SignIn;
 
-const StyledIntputGrid = styled(InputGrid)`
+const StyledInputGrid = styled(InputGrid)`
   gap: 10px;
 `;
 

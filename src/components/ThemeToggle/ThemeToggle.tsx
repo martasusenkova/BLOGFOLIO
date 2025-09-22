@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 declare module 'styled-components' {
   export interface DefaultTheme {
     background: string;
@@ -33,7 +31,7 @@ export const lightTheme = {
 export const darkTheme = {
   background: '#2c2c2c',
   text: '#ffffff',
-  primary: '#ff6600',
+  primary: '#0077ff',
   cardBorder: '#efefef',
   error: '#ff5c5c',
   inputBorder: '#d0d0d0',
