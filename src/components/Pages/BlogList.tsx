@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import FormTemplate from './FormTemplate';
 import { Tabs } from '../Tabs';
 import PostList from '../PostList';
 
-interface BlogListProps {
-  onThemeToggle: () => void;
-  currentTheme: 'light' | 'dark';
-}
-
-const BlogList: React.FC<BlogListProps> = ({ onThemeToggle, currentTheme }) => {
+const BlogList: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10;
@@ -64,15 +59,12 @@ const BlogList: React.FC<BlogListProps> = ({ onThemeToggle, currentTheme }) => {
   };
 
   return (
-    <FormTemplate
-      onThemeToggle={onThemeToggle}
-      currentTheme={currentTheme}
-      title="Blog"
-      showBackButton={false}
-    >
+    <FormTemplate title="Blog" showBackButton={false}>
       <Tabs tabs={tabsData} activeTab={activeTab} onTabChange={setActiveTab} />
+
+      <PostList layout="two-vertical" />
       {/* <PostList layout="default" /> */}
-      <PostList layout="two-vertical" />{' '}
+
       <PageNav>
         <PageButton>Back</PageButton>
         <PageNumbers>{renderPageNumbers()}</PageNumbers>

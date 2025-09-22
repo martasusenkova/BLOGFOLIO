@@ -9,29 +9,28 @@ import {
   faMoon,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '../Context';
 
 interface PageProps {
-  onThemeToggle: () => void;
-  currentTheme: 'light' | 'dark';
   children?: React.ReactNode;
   title: string;
   showBackButton?: boolean;
 }
 
 const FormTemplate: React.FC<PageProps> = ({
-  onThemeToggle,
-  currentTheme,
   children,
   title,
   showBackButton,
 }) => {
+  const { currentTheme, toggleTheme } = useTheme();
+
   return (
     <>
       <Header>
         <BurgerMenu />
         <HeaderNav>
           <SearchIcon icon={faSearch} />
-          <ThemeToggleButton onClick={onThemeToggle}>
+          <ThemeToggleButton onClick={toggleTheme}>
             <FontAwesomeIcon icon={currentTheme === 'light' ? faMoon : faSun} />
           </ThemeToggleButton>
           <UserIcon icon={faUser} />

@@ -4,22 +4,9 @@ import FormTemplate from './FormTemplate';
 import Button from '../Button';
 import { ContentContainer } from './Template';
 
-interface RegistrationProp {
-  onThemeToggle: () => void;
-  currentTheme: 'light' | 'dark';
-}
-
-const RegistrationConfirmation: React.FC<RegistrationProp> = ({
-  onThemeToggle,
-  currentTheme,
-}) => {
+const RegistrationConfirmation: React.FC = () => {
   return (
-    <FormTemplate
-      onThemeToggle={onThemeToggle}
-      currentTheme={currentTheme}
-      title="Registration Confirmation"
-      showBackButton={true}
-    >
+    <FormTemplate title="Registration Confirmation" showBackButton={true}>
       <ContentContainer>
         <ConfirmationMessage>
           <h1>Registration Successful!</h1>

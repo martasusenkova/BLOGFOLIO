@@ -2,19 +2,9 @@ import React from 'react';
 import FormTemplate from './FormTemplate';
 import styled from 'styled-components';
 
-interface TemplateProps {
-  onThemeToggle: () => void;
-  currentTheme: 'light' | 'dark';
-}
-
-const Template: React.FC<TemplateProps> = ({ onThemeToggle, currentTheme }) => {
+const Template: React.FC = () => {
   return (
-    <FormTemplate
-      onThemeToggle={onThemeToggle}
-      currentTheme={currentTheme}
-      title="Title"
-      showBackButton={true}
-    >
+    <FormTemplate title="Title" showBackButton={true}>
       <ContentContainer>Template Body</ContentContainer>
     </FormTemplate>
   );

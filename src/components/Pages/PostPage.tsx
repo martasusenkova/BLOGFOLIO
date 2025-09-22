@@ -18,11 +18,8 @@ import {
 } from '../PostCard/PostCard';
 
 import { PageButton, PageNav } from './BlogList';
-interface PostPageProps {
-  onThemeToggle: () => void;
-  currentTheme: 'light' | 'dark';
-}
-const PostPage: React.FC<PostPageProps> = ({ onThemeToggle, currentTheme }) => {
+
+const PostPage: React.FC = () => {
   const [post, setPost] = useState<IPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,12 +46,7 @@ const PostPage: React.FC<PostPageProps> = ({ onThemeToggle, currentTheme }) => {
   if (!post) return <Center>Пост не найден</Center>;
 
   return (
-    <FormTemplate
-      onThemeToggle={onThemeToggle}
-      currentTheme={currentTheme}
-      title={post.title}
-      showBackButton={false}
-    >
+    <FormTemplate title={post.title} showBackButton={false}>
       {' '}
       <PageWrapper>
         {post.image && <HeroImage src={post.image} alt={post.title} />}

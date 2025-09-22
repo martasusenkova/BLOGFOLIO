@@ -5,24 +5,14 @@ import { Input, InputContainer, InputGrid } from '../Input';
 import Button from '../Button';
 import styled from 'styled-components';
 
-interface SignUpProps {
-  onThemeToggle: () => void;
-  currentTheme: 'light' | 'dark';
-}
-
-const SignUp: React.FC<SignUpProps> = ({ onThemeToggle, currentTheme }) => {
+const SignUp: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <FormTemplate
-      onThemeToggle={onThemeToggle}
-      currentTheme={currentTheme}
-      title="Sign Up"
-      showBackButton={true}
-    >
+    <FormTemplate title="Sign Up" showBackButton={true}>
       <InputGrid>
         <InputContainer>
           <Input
