@@ -43,37 +43,3 @@ export const darkTheme = {
   disabledBorder: '#4a4a4a',
   inputGridBackground: '#333333',
 };
-
-const Toggle = styled.button<{ $active: boolean }>`
-  width: 60px;
-  height: 30px;
-  background: ${({ $active }) => ($active ? '#333' : '#ddd')};
-  border-radius: 30px;
-  position: relative;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: ${({ $active }) => ($active ? '32px' : '3px')};
-    width: 24px;
-    height: 24px;
-    background: white;
-    border-radius: 50%;
-    transition: left 0.3s ease;
-  }
-`;
-
-interface Props {
-  isDark: boolean;
-  toggle: () => void;
-}
-
-const ThemeToggle: React.FC<Props> = ({ isDark, toggle }) => {
-  return <Toggle $active={isDark} onClick={toggle} />;
-};
-
-export default ThemeToggle;

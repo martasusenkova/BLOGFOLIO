@@ -22,7 +22,7 @@ function App() {
 export default App;
 
 const ThemeWrapper = () => {
-  const { currentTheme, toggleTheme } = useTheme();
+  const { currentTheme } = useTheme();
   const theme = currentTheme === 'light' ? lightTheme : darkTheme;
 
   return (

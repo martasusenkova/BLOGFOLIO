@@ -6,6 +6,7 @@ interface IButton {
   text: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   width?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const Button: FC<IButton> = ({ variant, text, onClick, width }) => {
