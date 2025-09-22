@@ -67,15 +67,10 @@ export const PostCard: FC<PostCardProps> = ({
               <MirroredIcon icon={faThumbsDown} />
             </ActionsLeft>
             <ActionsRight>
-              <Button
-                variant="Secondary"
-                text=""
-                onClick={() => console.log('Like clicked')}
-                height="40px"
-              >
+              <IconBtn>
                 {' '}
                 <FontAwesomeIcon icon={faBookmark} />
-              </Button>
+              </IconBtn>
               <IconBtn>⋯</IconBtn>
             </ActionsRight>
           </Footer>

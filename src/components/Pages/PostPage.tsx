@@ -82,7 +82,8 @@ const PostPage: React.FC = () => {
               height="40px"
             >
               {' '}
-              <FontAwesomeIcon icon={faBookmark} /> Add to bookmarks
+              Add to bookmarks
+              <FontAwesomeIcon icon={faBookmark} />
             </Button>
           </ActionsRight>
         </ActionsContainer>
