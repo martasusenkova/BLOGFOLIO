@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Title from '../Components/Title';
 import BurgerMenu from '../Components/BurgerMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -59,29 +59,27 @@ const FormTemplate: React.FC<PageProps> = ({
         </ContentContainer>
       </StyledMain>
 
-      <StyledFooter $hasPagination={showPagination}>
-        {showPagination && (
+      {showPagination && (
+        <PaginationFooter>
           <Pagination
             currentPage={currentPage!}
             totalPages={totalPages!}
             onPageChange={onPageChange!}
           />
-        )}{' '}
-      </StyledFooter>
-      <StyledFooter $hasPagination={false}>
-        {' '}
+        </PaginationFooter>
+      )}
+
+      <BottomFooter>
         <FooterContent>
           <span>©2025 Blogfolio</span>
           <span>All rights reserved</span>
         </FooterContent>
-      </StyledFooter>
+      </BottomFooter>
     </StyledDiv>
   );
 };
 
 export default FormTemplate;
-
-// --- Styled Components ---
 
 const StyledDiv = styled.div`
   min-height: 100vh;
@@ -170,23 +168,34 @@ const ThemeToggleButton = styled.div`
   }
 `;
 
-const StyledFooter = styled.footer<{ $hasPagination: boolean }>`
+const PaginationFooter = styled.footer`
+  border-top: 1px solid ${({ theme }) => theme.cardBorder};
+  background: ${({ theme }) => theme.background};
+  padding: 16px 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 1124px) {
+    padding: 16px 100px;
+  }
+  @media (max-width: 768px) {
+    padding: 12px 40px;
+  }
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
+`;
+
+/* --- Нижний футер с копирайтом --- */
+const BottomFooter = styled.footer`
+  border-top: 1px solid ${({ theme }) => theme.cardBorder};
+  background: ${({ theme }) => theme.background};
+  padding: 20px 150px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  padding: 20px 150px;
-  color: ${({ theme }) => theme.text};
-  border-top: 1px solid ${({ theme }) => theme.cardBorder};
-  background: ${({ theme }) => theme.background};
-
-  ${({ $hasPagination }) =>
-    $hasPagination &&
-    css`
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    `}
 
   @media (max-width: 1124px) {
     padding: 20px 100px;
