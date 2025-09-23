@@ -113,7 +113,7 @@ const PageNumbers = styled.div`
 const PageNumber = styled.span<{ $isActive: boolean }>`
   font-size: 14px;
   cursor: pointer;
-  color: ${(props) => (props.$isActive ? 'black' : 'gray')};
+  color: ${({ theme }) => theme.text};
   font-weight: ${(props) => (props.$isActive ? 'bold' : 'normal')};
   text-decoration: ${(props) => (props.$isActive ? 'underline' : 'none')};
 `;
@@ -123,7 +123,7 @@ const PageButton = styled.button`
   border: none;
   font-size: 14px;
   cursor: pointer;
-  color: #000;
+  color: ${({ theme }) => theme.text};
   opacity: 0.6;
   display: flex;
   align-items: center;

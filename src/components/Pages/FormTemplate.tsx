@@ -191,6 +191,7 @@ const PaginationFooter = styled.footer`
 const BottomFooter = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.cardBorder};
   background: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text};
   padding: 20px 150px;
   display: flex;
   justify-content: space-between;
