@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { ThemeProvider, useTheme } from './components/Context';
+import { ThemeProvider, useTheme } from './Context';
 import { lightTheme, darkTheme } from './components/ThemeToggle';
 
 import BlogList from './components/Pages/BlogList';

@@ -9,7 +9,7 @@ import {
   faMoon,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { useTheme } from '../Context';
+import { useTheme } from '../../Context';
 import Pagination from '../Pagination/Pagination';
 
 interface PageProps {
