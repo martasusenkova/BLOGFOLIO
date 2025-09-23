@@ -120,11 +120,11 @@ export const InputGrid = styled.div`
   border: 1px solid;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   width: fit-content;
   justify-content: center;
   align-items: flex-start;
-  margin: 0 auto 40px;
+  margin: 0 auto;
 `;
 
 export const InputContainer = styled.div`

@@ -4,33 +4,34 @@ import Button from '../Button';
 import { IPost } from '../PostCard';
 import { fetchPostsFull } from '../../Api/api';
 import FormTemplate from './FormTemplate';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faThumbsUp,
   faThumbsDown,
   faBookmark,
 } from '@fortawesome/free-regular-svg-icons';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ActionsLeft, ActionsRight, MirroredIcon } from '../PostCard/PostCard';
 
-import { PageButton, PageNav } from './BlogList';
+const POSTS_PER_PAGE = 1;
 
 const PostPage: React.FC = () => {
-  const [post, setPost] = useState<IPost | null>(null);
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const posts = await fetchPostsFull();
-        if (posts.length > 0) {
-          setPost(posts[0]);
+        const fetchedPosts = await fetchPostsFull();
+        if (fetchedPosts.length > 0) {
+          setPosts(fetchedPosts);
         } else {
           setError('Посты не найдены');
         }
       } catch {
-        setError('Ошибка при загрузке поста');
+        setError('Ошибка при загрузке постов');
       } finally {
         setLoading(false);
       }
@@ -38,15 +39,24 @@ const PostPage: React.FC = () => {
   }, []);
 
   if (loading) return <Center>Загрузка...</Center>;
-  if (error) return <Center>{error}</Center>;
-  if (!post) return <Center>Пост не найден</Center>;
+  if (posts.length === 0) return <Center>Посты не найдены</Center>;
+
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const currentPost = posts[(currentPage - 1) * POSTS_PER_PAGE];
 
   return (
-    <FormTemplate title={post.title} showBackButton={false}>
-      {' '}
+    <FormTemplate
+      title={currentPost.title}
+      showBackButton={false}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={setCurrentPage}
+    >
       <PageWrapper>
-        {post.image && <HeroImage src={post.image} alt={post.title} />}
-        <Content dangerouslySetInnerHTML={{ __html: post.text }} />
+        {currentPost.image && (
+          <HeroImage src={currentPost.image} alt={currentPost.title} />
+        )}
+        <Content dangerouslySetInnerHTML={{ __html: currentPost.text }} />
         <ActionsContainer>
           <ActionsLeft>
             <Button
@@ -75,21 +85,11 @@ const PostPage: React.FC = () => {
               onClick={() => console.log('Add to bookmark clicked')}
               height="40px"
             >
-              {' '}
               Add to bookmarks
               <FontAwesomeIcon icon={faBookmark} />
             </Button>
           </ActionsRight>
         </ActionsContainer>
-        <PageNav>
-          {' '}
-          <PageButton>Back</PageButton>
-          <PageButton>Next</PageButton>
-        </PageNav>
-        <StyledPageNav>
-          <FontAwesomeIcon icon={faArrowLeft} />
-          <FontAwesomeIcon icon={faArrowRight} />
-        </StyledPageNav>
       </PageWrapper>
     </FormTemplate>
   );
@@ -97,6 +97,7 @@ const PostPage: React.FC = () => {
 
 export default PostPage;
 
+// --- Styled Components ---
 const PageWrapper = styled.main`
   max-width: 850px;
   margin: 32px auto;
@@ -111,7 +112,6 @@ const Center = styled.div`
 
 const HeroImage = styled.img`
   width: 100%;
-
   border-radius: 8px;
   margin-bottom: 20px;
 `;
@@ -136,9 +136,4 @@ const ActionsContainer = styled.div`
   align-items: center;
   margin-top: 20px;
   padding: 0 34px;
-`;
-const StyledPageNav = styled(PageNav)`
-  padding: 0;
-  margin-top: 5px;
-  width: 100%;
 `;

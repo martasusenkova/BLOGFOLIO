@@ -14,7 +14,7 @@ export default Title;
 const StyledTitle = styled.h2`
   color: ${({ theme }) => theme.text};
   font-weight: 900;
-  font-size: 40px;
+  font-size: 36px;
   display: flex;
   flex-direction: column;
   margin: 10px;

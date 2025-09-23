@@ -49,7 +49,7 @@ const SignIn: React.FC = () => {
           </Button>
 
           <ForgotLinkTwo>
-            Don't have an account? <a href="/">Sign Up</a>
+            Don't have an account? <a href="/signup">Sign Up</a>
           </ForgotLinkTwo>
         </StyledInputGrid>
       </form>
@@ -64,7 +64,7 @@ const StyledInputGrid = styled(InputGrid)`
 `;
 
 const ForgotLink = styled(StyledLink)`
-  margin: 0 0 10px;
+  margin: 0 0 5px;
   padding: 0;
   display: flex;
   flex-direction: row;
@@ -73,7 +73,6 @@ const ForgotLink = styled(StyledLink)`
 const ForgotLinkTwo = styled(StyledLink)`
   margin: 6px;
   padding: 0;
-
   display: flex;
   flex-direction: row;
   align-items: center;

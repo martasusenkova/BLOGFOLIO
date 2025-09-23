@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
-import styled from 'styled-components';
-import Button from '../Button';
+import styled, { css } from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -22,7 +21,12 @@ export interface IPost {
 
 interface PostCardProps {
   post: IPost;
-  variant?: 'horizontal' | 'vertical' | 'compact';
+  variant?:
+    | 'horizontal'
+    | 'vertical'
+    | 'compact'
+    | 'compact-reverse'
+    | undefined;
   footer?: boolean;
 }
 const fallbackImageUrl = '/astronaut.jpg';
@@ -88,30 +92,43 @@ const Wrapper = styled.div`
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  width: 100%;
   margin: 0 auto;
 `;
 
-const CardContainer = styled.div<{ $variant: string }>`
+export const CardContainer = styled.div<{ $variant: string }>`
   display: flex;
-  flex-direction: row-reverse;
   padding: 8px;
-  align-items: center;
-  justify-content: space-between;
   align-items: flex-start;
-
   flex: 1;
+
+  ${({ $variant }) =>
+    $variant === 'horizontal' &&
+    `
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+    `}
 
   ${({ $variant }) =>
     $variant === 'vertical' &&
     `
       flex-direction: column;
-      align-items: flex-start;
     `}
+  
   ${({ $variant }) =>
     $variant === 'compact' &&
     `
-      align-items: flex-start;
+      flex-direction: row-reverse;
+      justify-content: flex-start;
       padding: 8px 12px;
+    `}
+      
+  ${({ $variant }) =>
+    $variant === 'compact-reverse' &&
+    `
+      flex-direction: row;
+      justify-content: flex-start;
     `}
 `;
 
@@ -119,35 +136,85 @@ const ImageWrapper = styled.div<{ $variant: string }>`
   img {
     border-radius: 3px;
     object-fit: cover;
-    ${({ $variant }) =>
-      $variant === 'horizontal' &&
-      `
-        width: 230px;
-        height: 230px;
-      `}
-    ${({ $variant }) =>
-      $variant === 'vertical' &&
-      `
-        width: 330px;
-        height: 200px;
-        margin-bottom: 12px;
-      `}
-    ${({ $variant }) =>
-      $variant === 'compact' &&
-      `
-        width: 80px;
-        height: 80px;
-        margin-right: 12px;
-        margin-left: 16px;
-      `}
+    width: 100%;
+    height: 100%;
   }
+
+  ${({ $variant }) =>
+    $variant === 'horizontal' &&
+    css`
+      width: 230px;
+      height: 230px;
+
+      @media (max-width: 1200px) {
+        width: 100%;
+        height: 180px;
+      }
+
+      @media (max-width: 768px) {
+        height: 140px;
+      }
+
+      @media (min-width: 1400px) {
+        width: auto;
+        height: auto;
+        flex: 1;
+
+        img {
+          aspect-ratio: 16 / 9;
+        }
+      }
+    `}
+
+  ${({ $variant }) =>
+    $variant === 'vertical' &&
+    css`
+      width: 330px;
+      height: 200px;
+      margin-bottom: 12px;
+
+      @media (max-width: 1200px) {
+        width: 100%;
+        height: 160px;
+      }
+
+      @media (max-width: 768px) {
+        height: 120px;
+      }
+
+      @media (min-width: 1400px) {
+        width: 100%;
+        height: auto;
+
+        img {
+          aspect-ratio: 1.65 / 1;
+        }
+      }
+    `}
+
+  ${({ $variant }) =>
+    ($variant === 'compact' || $variant === 'compact-reverse') &&
+    css`
+      width: 80px;
+      height: 80px;
+      margin-right: 12px;
+      margin-left: 16px;
+
+      @media (max-width: 768px) {
+        margin-right: 8px;
+      }
+
+      @media (max-width: 480px) {
+        width: 60px;
+        height: 60px;
+      }
+    `}
 `;
 
 const Content = styled.div<{ $variant: string }>`
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-width: 450px;
 `;
 
 const DateText = styled.span`
@@ -157,28 +224,54 @@ const DateText = styled.span`
 `;
 
 const Title = styled.h3<{ $variant: string }>`
-  font-size: 24px;
+  font-size: 20px;
   line-height: 160%;
   margin: 0 0 8px 0;
   font-weight: 900;
 
   ${({ $variant }) =>
-    $variant === 'vertical' &&
-    `
-      font-size: 16px; 
+    $variant === 'horizontal' &&
+    css`
+      @media (max-width: 1024px) {
+        font-size: 20px;
+      }
+      @media (max-width: 768px) {
+        font-size: 18px;
+      }
     `}
 
   ${({ $variant }) =>
-    $variant === 'compact' &&
-    `
-      font-size: 14px; 
+    $variant === 'vertical' &&
+    css`
+      font-size: 16px;
+      @media (max-width: 1024px) {
+        font-size: 14px;
+      }
+    `}
+
+  ${({ $variant }) =>
+    ($variant === 'compact' || $variant === 'compact-reverse') &&
+    css`
+      font-size: 14px;
+
+      @media (max-width: 1200px) {
+        font-size: 11px;
+      }
     `}
 `;
+
 const Text = styled.p`
   font-size: 16px;
   line-height: 150%;
   color: ${({ theme }) => theme.text};
   margin-bottom: 12px;
+
+  @media (max-width: 1024px) {
+    font-size: 14px;
+  }
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 const Divider = styled.hr`

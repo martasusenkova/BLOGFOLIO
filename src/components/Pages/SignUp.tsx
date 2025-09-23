@@ -81,7 +81,7 @@ const SignUp: React.FC = () => {
             Sign Up{' '}
           </Button>
           <StyledLink>
-            Already have an account? <a href="/">Sign in</a>
+            Already have an account? <a href="/signin">Sign in</a>
           </StyledLink>
         </InputGrid>
       </form>
@@ -93,7 +93,7 @@ export default SignUp;
 
 export const StyledLink = styled.p`
   all: unset;
-  margin: 20px 0;
+  margin: 0;
   font-size: 14px;
   color: ${({ theme }) => theme.text};
   a {
@@ -107,5 +107,5 @@ export const StyledLink = styled.p`
 export const ErrorText = styled.div`
   color: red;
   font-size: 13px;
-  margin: 10px 0;
+  margin: 6px 0 0;
 `;

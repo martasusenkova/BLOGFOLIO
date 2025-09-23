@@ -1,7 +1,9 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { ThemeProvider, useTheme } from './components/Context';
 import { lightTheme, darkTheme } from './components/ThemeToggle';
+
 import BlogList from './components/Pages/BlogList';
 import SignUp from './components/Pages/SignUp';
 import Template from './components/Pages/Template';
@@ -10,11 +12,14 @@ import SignIn from './components/Pages/SignIn';
 import Success from './components/Pages/Success';
 import RegistrationConfirmation from './components/Pages/RegistrationConfirmation';
 import HW_39 from './components/Pages/HW39';
+import SearchResultsPage from './components/Pages/SearchResult';
 
 function App() {
   return (
     <ThemeProvider>
-      <ThemeWrapper />
+      <Router>
+        <ThemeWrapper />
+      </Router>
     </ThemeProvider>
   );
 }
@@ -27,14 +32,20 @@ const ThemeWrapper = () => {
 
   return (
     <StyledThemeProvider theme={theme}>
-      <HW_39 />
-      <Template />
-      <BlogList />
-      <SignUp />
-      <RegistrationConfirmation />
-      <Success />
-      <SignIn />
-      <PostPage />
+      <Routes>
+        <Route path="/" element={<Template />} />
+        <Route path="/searchresult" element={<SearchResultsPage />} />
+        <Route path="/blog" element={<BlogList />} />
+        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/success" element={<Success />} />
+        <Route
+          path="/registration-confirmation"
+          element={<RegistrationConfirmation />}
+        />
+        <Route path="/hw39" element={<HW_39 />} />
+      </Routes>
     </StyledThemeProvider>
   );
 };
