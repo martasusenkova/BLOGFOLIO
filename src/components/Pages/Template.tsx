@@ -19,7 +19,8 @@ export const ContentContainer = styled.div`
   justify-content: space-evenly;
   border: 2px solid ${({ theme }) => theme.cardBorder};
   height: 100px;
-  width: 600px;
+  width: 300px;
+  max-width: 600px;
   height: 300px;
   margin: 20px auto 100px;
   color: ${({ theme }) => theme.text};

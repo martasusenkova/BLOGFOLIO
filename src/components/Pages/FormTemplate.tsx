@@ -66,7 +66,10 @@ const FormTemplate: React.FC<PageProps> = ({
             totalPages={totalPages!}
             onPageChange={onPageChange!}
           />
-        )}
+        )}{' '}
+      </StyledFooter>
+      <StyledFooter $hasPagination={false}>
+        {' '}
         <FooterContent>
           <span>©2025 Blogfolio</span>
           <span>All rights reserved</span>
@@ -209,7 +212,6 @@ const ContentContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   color: ${({ theme }) => theme.text};
-
   @media (max-width: 480px) {
     align-items: flex-start;
   }

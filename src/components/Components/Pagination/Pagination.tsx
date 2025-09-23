@@ -38,7 +38,6 @@ const Pagination: FC<PaginationProps> = ({
         </PageNumber>
       );
       if (startPage > 2) {
-        // Исправлена логика для многоточия
         pageNumbers.push(<Ellipsis key="ellipsis-start">...</Ellipsis>);
       }
     }
