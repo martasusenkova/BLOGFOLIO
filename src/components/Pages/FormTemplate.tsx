@@ -131,7 +131,7 @@ const StyledMain = styled.main`
     padding: 20px 40px;
   }
   @media (max-width: 480px) {
-    padding: 15px;
+    padding: 10px;
     font-size: 16px;
   }
 `;
