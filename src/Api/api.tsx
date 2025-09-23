@@ -1,4 +1,4 @@
-import { IPost } from '../components/PostCard';
+import { IPost } from '../components/Components/PostCard';
 
 interface ApiResponse {
   count: number;

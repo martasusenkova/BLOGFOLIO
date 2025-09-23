@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { IPost, PostCard } from '../PostCard';
+import { IPost, PostCard } from '../Components/PostCard';
 import { fetchPosts } from '../../Api/api';
 import FormTemplate from './FormTemplate';
 

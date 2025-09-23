@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FormTemplate from './FormTemplate';
-import { Input, InputContainer, InputGrid } from '../Input';
-import Button from '../Button';
+import { Input, InputContainer, InputGrid } from '../Components/Input';
+import Button from '../Components/Button';
 import styled from 'styled-components';
 
 const SignUp: React.FC = () => {

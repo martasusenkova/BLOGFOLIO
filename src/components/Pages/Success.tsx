@@ -1,6 +1,6 @@
 import React from 'react';
 import FormTemplate from './FormTemplate';
-import Button from '../Button';
+import Button from '../Components/Button';
 import { ContentContainer } from './Template';
 
 const Success: React.FC = () => {

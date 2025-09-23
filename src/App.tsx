@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { ThemeProvider, useTheme } from './Context';
-import { lightTheme, darkTheme } from './components/ThemeToggle';
+import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
 
 import BlogList from './components/Pages/BlogList';
 import SignUp from './components/Pages/SignUp';

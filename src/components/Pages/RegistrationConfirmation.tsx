@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FormTemplate from './FormTemplate';
-import Button from '../Button';
+import Button from '../Components/Button';
 import { ContentContainer } from './Template';
 
 const RegistrationConfirmation: React.FC = () => {

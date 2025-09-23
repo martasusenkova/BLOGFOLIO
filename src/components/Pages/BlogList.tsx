@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FormTemplate from './FormTemplate';
-import { Tabs } from '../Tabs';
-import PostList from '../PostList';
+import { Tabs } from '../Components/Tabs';
+import PostList from '../Components/PostList';
 
 const BlogList: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all');

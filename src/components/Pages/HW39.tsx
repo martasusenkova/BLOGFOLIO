@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import User from '../User';
-import Button from '../Button';
-import { Input, InputContainer, InputGrid } from '../Input';
-import Textarea from '../Textarea';
-import { Tabs } from '../Tabs';
+import User from '../Components/User';
+import Button from '../Components/Button';
+import { Input, InputContainer, InputGrid } from '../Components/Input';
+import Textarea from '../Components/Textarea';
+import { Tabs } from '../Components/Tabs';
 import FormTemplate from './FormTemplate';
 
 const HW_39: React.FC = () => {

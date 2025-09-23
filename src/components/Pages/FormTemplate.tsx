@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import Title from '../Title';
-import BurgerMenu from '../BurgerMenu';
+import Title from '../Components/Title';
+import BurgerMenu from '../Components/BurgerMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -10,7 +10,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '../../Context';
-import Pagination from '../Pagination/Pagination';
+import Pagination from '../Components/Pagination/Pagination';
 
 interface PageProps {
   children?: React.ReactNode;

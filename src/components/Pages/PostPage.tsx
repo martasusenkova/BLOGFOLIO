@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Button from '../Button';
-import { IPost } from '../PostCard';
+import Button from '../Components/Button';
+import { IPost } from '../Components/PostCard';
 import { fetchPostsFull } from '../../Api/api';
 import FormTemplate from './FormTemplate';
 
@@ -11,7 +11,11 @@ import {
   faThumbsDown,
   faBookmark,
 } from '@fortawesome/free-regular-svg-icons';
-import { ActionsLeft, ActionsRight, MirroredIcon } from '../PostCard/PostCard';
+import {
+  ActionsLeft,
+  ActionsRight,
+  MirroredIcon,
+} from '../Components/PostCard/PostCard';
 
 const POSTS_PER_PAGE = 1;
 
