@@ -13,7 +13,7 @@ const User: FC<IUser> = ({ username }) => {
 
   return (
     <UserContainer>
-      <MiniStyledUser>{initials}</MiniStyledUser>{' '}
+      <MiniStyledUser>{initials}</MiniStyledUser>
       <StyledUser>{username}</StyledUser>
     </UserContainer>
   );
@@ -21,33 +21,41 @@ const User: FC<IUser> = ({ username }) => {
 
 export default User;
 
-const StyledUser = styled.div`
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+const UserContainer = styled.div`
+  background-color: #0019a4;
+
   width: fit-content;
-  padding: 4px;
-`;
-const MiniStyledUser = styled.div`
-  color: white;
-  background-color: rgb(115, 136, 211);
-  padding: 8px 6px;
+  height: 100%;
+  padding: 10px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
+  margin: 0;
+
+  gap: 8px;
+
   font-weight: bold;
-  border-radius: 4px;
-  font-size: 16px;
 `;
 
-const UserContainer = styled.div`
-  background-color: rgb(79, 72, 227);
-  width: fit-content;
+const MiniStyledUser = styled.div`
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
-  gap: 8px;
   font-weight: bold;
+  font-size: 14px;
+  box-sizing: border-box;
+`;
+
+const StyledUser = styled.div`
+  color: white;
+  font-size: 16px;
+  font-weight: normal;
+  padding: 0 15px;
 `;

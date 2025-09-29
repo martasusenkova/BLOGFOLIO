@@ -1,15 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Title from '../Components/Title';
-import BurgerMenu from '../Components/BurgerMenu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faSun,
-  faMoon,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
-import { useTheme } from '../../Context';
+import Header from '../Components/Header/Header';
 import Pagination from '../Components/Pagination/Pagination';
 
 interface PageProps {
@@ -29,8 +21,6 @@ const FormTemplate: React.FC<PageProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const { currentTheme, toggleTheme } = useTheme();
-
   const showPagination = !!(
     currentPage &&
     totalPages &&
@@ -40,16 +30,7 @@ const FormTemplate: React.FC<PageProps> = ({
 
   return (
     <StyledDiv>
-      <Header>
-        <BurgerMenu />
-        <HeaderNav>
-          <SearchIcon icon={faSearch} />
-          <ThemeToggleButton onClick={toggleTheme}>
-            <FontAwesomeIcon icon={currentTheme === 'light' ? faMoon : faSun} />
-          </ThemeToggleButton>
-          <UserIcon icon={faUser} />
-        </HeaderNav>
-      </Header>
+      <Header />
 
       <StyledMain>
         <ContentContainer>
@@ -89,34 +70,6 @@ const StyledDiv = styled.div`
   background: ${({ theme }) => theme.background};
 `;
 
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #0000ae;
-  color: #fff;
-  height: 50px;
-  position: relative;
-
-  @media (max-width: 768px) {
-    height: 40px;
-  }
-`;
-
-const HeaderNav = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: absolute;
-  right: 20px;
-
-  @media (max-width: 480px) {
-    gap: 10px;
-    right: 10px;
-  }
-`;
-
 const StyledMain = styled.main`
   background: ${({ theme }) => theme.background};
   padding: 20px 150px;
@@ -133,37 +86,6 @@ const StyledMain = styled.main`
   }
   @media (max-width: 480px) {
     padding: 10px;
-    font-size: 16px;
-  }
-`;
-
-const SearchIcon = styled(FontAwesomeIcon)`
-  cursor: pointer;
-  font-size: 20px;
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
-`;
-
-const UserIcon = styled(FontAwesomeIcon)`
-  font-size: 20px;
-  cursor: pointer;
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
-`;
-
-const ThemeToggleButton = styled.div`
-  cursor: pointer;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-
-  @media (max-width: 480px) {
     font-size: 16px;
   }
 `;
