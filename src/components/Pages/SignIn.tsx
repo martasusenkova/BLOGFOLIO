@@ -52,7 +52,7 @@ const SignIn: React.FC = () => {
 
           <ForgotLink>
             {' '}
-            <Link to="/">Forgot password?</Link>
+            <p>Forgot password?</p>
           </ForgotLink>
 
           <Button variant="Primary" width="340px" type="submit">
@@ -60,7 +60,8 @@ const SignIn: React.FC = () => {
           </Button>
 
           <ForgotLinkTwo>
-            Don't have an account? <Link to="/signup">Sign Up</Link>
+            Don't have an account?{' '}
+            <StyledRouterLink to="/signup">Sign Up</StyledRouterLink>
           </ForgotLinkTwo>
         </StyledInputGrid>
       </form>
@@ -89,4 +90,8 @@ const ForgotLinkTwo = styled(StyledLink)`
   align-items: center;
   gap: 4px;
   justify-content: center;
+`;
+
+export const StyledRouterLink = styled(Link)`
+  color: ${({ theme }) => theme.primary2} !important;
 `;

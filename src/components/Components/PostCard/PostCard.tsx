@@ -18,15 +18,17 @@ export interface IPost {
   author: number;
   description: string;
 }
+export type PostVariant =
+  | 'horizontal'
+  | 'vertical'
+  | 'compact'
+  | 'compact-reverse'
+  | 'two-vertical';
 
 interface PostCardProps {
   post: IPost;
-  variant?:
-    | 'horizontal'
-    | 'vertical'
-    | 'compact'
-    | 'compact-reverse'
-    | undefined;
+  variant?: PostVariant | undefined;
+
   footer?: boolean;
 }
 const fallbackImageUrl = '/astronaut.jpg';
@@ -104,21 +106,25 @@ export const CardContainer = styled.div<{ $variant: string }>`
 
   ${({ $variant }) =>
     $variant === 'horizontal' &&
-    `
+    css`
       flex-direction: row-reverse;
       justify-content: space-between;
-      align-items: center;
+
+      @media (max-width: 1124px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     `}
 
   ${({ $variant }) =>
     $variant === 'vertical' &&
-    `
+    css`
       flex-direction: column;
     `}
   
   ${({ $variant }) =>
     $variant === 'compact' &&
-    `
+    css`
       flex-direction: row-reverse;
       justify-content: flex-start;
       padding: 8px 12px;
@@ -126,7 +132,7 @@ export const CardContainer = styled.div<{ $variant: string }>`
       
   ${({ $variant }) =>
     $variant === 'compact-reverse' &&
-    `
+    css`
       flex-direction: row;
       justify-content: flex-start;
     `}
@@ -145,24 +151,26 @@ const ImageWrapper = styled.div<{ $variant: string }>`
     css`
       width: 230px;
       height: 230px;
+      margin-left: 16px;
 
       @media (max-width: 1200px) {
+        width: 200px;
+        height: 200px;
+      }
+
+      @media (max-width: 1124px) {
         width: 100%;
         height: 180px;
+        margin-left: 0;
+        margin-bottom: 12px;
       }
 
       @media (max-width: 768px) {
         height: 140px;
       }
 
-      @media (min-width: 1400px) {
-        width: auto;
-        height: auto;
-        flex: 1;
-
-        img {
-          aspect-ratio: 16 / 9;
-        }
+      img {
+        aspect-ratio: 16 / 9;
       }
     `}
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { StyledRouterLink } from '../Pages/SignIn';
+
 import FormTemplate from './FormTemplate';
 import { Input, InputContainer, InputGrid } from '../Components/Input';
 import Button from '../Components/Button';
@@ -87,7 +89,8 @@ const SignUp: React.FC = () => {
             Sign Up{' '}
           </Button>
           <StyledLink>
-            Already have an account? <Link to="/signin">Sign in</Link>{' '}
+            Already have an account?{' '}
+            <StyledRouterLink to="/signin">Sign in</StyledRouterLink>{' '}
           </StyledLink>
         </InputGrid>
       </form>

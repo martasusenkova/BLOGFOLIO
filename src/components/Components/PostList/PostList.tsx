@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import { PostCard, IPost } from '../../Components/PostCard';
+import { PostCard, IPost, PostVariant } from '../../Components/PostCard';
 import { fetchPosts } from '../../../Api/api';
 import useWindowWidth from '../../../Hooks/useWindowWidth';
 
 interface PostListProps {
-  layout?: 'default' | 'two-vertical';
+  layout: PostVariant;
 }
 
-const PostList: React.FC<PostListProps> = ({ layout = 'default' }) => {
+const PostList: React.FC<PostListProps> = ({ layout }) => {
   const [posts, setPosts] = useState<IPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const width = useWindowWidth();
 
   useEffect(() => {
@@ -19,90 +20,88 @@ const PostList: React.FC<PostListProps> = ({ layout = 'default' }) => {
         setPosts(postsData);
       } catch (err) {
         console.error('Не удалось загрузить посты:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
     loadPosts();
   }, []);
 
-  let postsToRender = [];
-  let cardVariant:
-    | 'vertical'
-    | 'compact'
-    | 'horizontal'
-    | 'compact-reverse'
-    | undefined;
+  if (width < 950) {
+    const responsiveVariant = width < 768 ? 'compact' : 'vertical';
 
-  if (width < 768) {
-    postsToRender = posts.slice(0, 6);
-    cardVariant = 'compact';
-  } else if (width < 950) {
-    postsToRender = posts.slice(0, 12);
-    cardVariant = 'vertical';
-  } else {
+    return (
+      <ResponsiveWrapper>
+        {posts.slice(0, 12).map((post) => (
+          <PostCard key={post.id} post={post} variant={responsiveVariant} />
+        ))}
+      </ResponsiveWrapper>
+    );
+  }
+
+  const isHorizontalLayout = layout === 'horizontal';
+  const isTwoVerticalLayout = layout === 'two-vertical';
+
+  if (isTwoVerticalLayout) {
+    return (
+      <PostsGridContainer $layout="two-vertical">
+        {posts.slice(0, 6).map((post, index) => (
+          <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
+            <PostCard post={post} variant="vertical" />
+          </PostWrapper>
+        ))}
+        {posts.slice(6, 12).map((post, index) => (
+          <PostWrapper key={post.id} $area={`compact${index + 1}`}>
+            <PostCard post={post} variant="compact" />
+          </PostWrapper>
+        ))}
+      </PostsGridContainer>
+    );
+  }
+
+  if (isHorizontalLayout) {
     const defaultHorizontalPost = posts[0];
     const defaultVerticalPosts = posts.slice(1, 5);
     const defaultCompactPosts = posts.slice(5, 11);
 
     return (
-      <PostsGridContainer $layout={layout}>
-        {layout === 'default' && (
-          <>
-            {defaultHorizontalPost && (
-              <PostWrapper $area="horizontal">
-                <PostCard post={defaultHorizontalPost} variant="horizontal" />
-              </PostWrapper>
-            )}
-            {defaultVerticalPosts.map((post, index) => (
-              <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
-                <PostCard post={post} variant="vertical" />
-              </PostWrapper>
-            ))}
-            {defaultCompactPosts.map((post, index) => (
-              <PostWrapper key={post.id} $area={`compact${index + 1}`}>
-                <PostCard post={post} variant="compact" />
-              </PostWrapper>
-            ))}
-          </>
+      <PostsGridContainer $layout="horizontal">
+        {defaultHorizontalPost && (
+          <PostWrapper $area="horizontal">
+            <PostCard post={defaultHorizontalPost} variant="horizontal" />
+          </PostWrapper>
         )}
-        {layout === 'two-vertical' && (
-          <>
-            {posts.slice(0, 6).map((post, index) => (
-              <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
-                <PostCard post={post} variant="vertical" />
-              </PostWrapper>
-            ))}
-            {posts.slice(6, 12).map((post, index) => (
-              <PostWrapper key={post.id} $area={`compact${index + 1}`}>
-                <PostCard post={post} variant="compact" />
-              </PostWrapper>
-            ))}
-          </>
-        )}
+        {defaultVerticalPosts.map((post, index) => (
+          <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
+            <PostCard post={post} variant="vertical" />
+          </PostWrapper>
+        ))}
+        {defaultCompactPosts.map((post, index) => (
+          <PostWrapper key={post.id} $area={`compact${index + 1}`}>
+            <PostCard post={post} variant="compact" />
+          </PostWrapper>
+        ))}
       </PostsGridContainer>
     );
   }
 
-  return (
-    <ResponsiveWrapper>
-      {postsToRender.map((post) => (
-        <PostCard key={post.id} post={post} variant={cardVariant} />
-      ))}
-    </ResponsiveWrapper>
-  );
+  return null;
 };
 
 export default PostList;
 
 // --- Styled Components ---
 
-const PostsGridContainer = styled.div<{ $layout: 'default' | 'two-vertical' }>`
+const PostsGridContainer = styled.div<{
+  $layout: 'horizontal' | 'two-vertical';
+}>`
   display: grid;
   gap: 10px;
   background: ${({ theme }) => theme.background};
   margin-bottom: 20px;
 
   ${({ $layout }) =>
-    $layout === 'default'
+    $layout === 'horizontal'
       ? css`
           grid-template-columns: 1fr 1fr 1fr;
           grid-template-areas:
@@ -125,8 +124,8 @@ const PostsGridContainer = styled.div<{ $layout: 'default' | 'two-vertical' }>`
         `}
 `;
 
-const PostWrapper = styled.div<{ $area: string }>`
-  grid-area: ${({ $area }) => $area};
+const PostWrapper = styled.div<{ $area?: string }>`
+  ${({ $area }) => $area && `grid-area: ${$area};`}
 `;
 
 const ResponsiveWrapper = styled.div`
