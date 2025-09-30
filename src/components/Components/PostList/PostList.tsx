@@ -2,16 +2,26 @@ import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { PostCard, IPost } from '../../Components/PostCard';
 import { fetchPosts } from '../../../Api/api';
-import useWindowWidth from '../../../Hooks/UseWindowWidth';
+import useWindowWidth from '../../../Hooks/useWindowWidth';
 
 interface PostListProps {
   layout?: 'default' | 'two-vertical';
 }
 
+type CardVariant =
+  | 'vertical'
+  | 'compact'
+  | 'horizontal'
+  | 'compact-reverse'
+  | undefined;
+
 const PostList: React.FC<PostListProps> = ({ layout = 'default' }) => {
   const [posts, setPosts] = useState<IPost[]>([]);
-  const width = useWindowWidth();
+  const [postsToRender, setPostsToRender] = useState<IPost[]>([]);
+  const [cardVariant, setCardVariant] = useState<CardVariant>(undefined);
 
+  const width = useWindowWidth();
+  const isComplexLayout = width >= 950;
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -24,21 +34,31 @@ const PostList: React.FC<PostListProps> = ({ layout = 'default' }) => {
     loadPosts();
   }, []);
 
-  let postsToRender = [];
-  let cardVariant:
-    | 'vertical'
-    | 'compact'
-    | 'horizontal'
-    | 'compact-reverse'
-    | undefined;
+  useEffect(() => {
+    if (posts.length === 0 || isComplexLayout) {
+      setPostsToRender([]);
+      setCardVariant(undefined);
+      return;
+    }
 
-  if (width < 768) {
-    postsToRender = posts.slice(0, 6);
-    cardVariant = 'compact';
-  } else if (width < 950) {
-    postsToRender = posts.slice(0, 12);
-    cardVariant = 'vertical';
-  } else {
+    let nextPosts: IPost[] = [];
+    let nextVariant: CardVariant = undefined;
+
+    if (width < 768) {
+      nextPosts = posts.slice(0, 6);
+      nextVariant = 'compact';
+    } else if (width < 950) {
+      nextPosts = posts.slice(0, 12);
+      nextVariant = 'vertical';
+    }
+
+    setPostsToRender(nextPosts);
+    setCardVariant(nextVariant);
+  }, [posts, width, isComplexLayout]);
+
+  // --- РЕНДЕРИНГ ---
+
+  if (isComplexLayout) {
     const defaultHorizontalPost = posts[0];
     const defaultVerticalPosts = posts.slice(1, 5);
     const defaultCompactPosts = posts.slice(5, 11);
@@ -93,7 +113,7 @@ const PostList: React.FC<PostListProps> = ({ layout = 'default' }) => {
 
 export default PostList;
 
-// --- Styled Components ---
+// --- Styled Components  ---
 
 const PostsGridContainer = styled.div<{ $layout: 'default' | 'two-vertical' }>`
   display: grid;
