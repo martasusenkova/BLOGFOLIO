@@ -1,3 +1,3 @@
-import Header from './Header';
+import Header, { UserContainerButton, MOCK_USERNAME } from './Header';
 
-export default Header;
+export { Header, UserContainerButton, MOCK_USERNAME };

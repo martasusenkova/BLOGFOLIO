@@ -22,22 +22,14 @@ const User: FC<IUser> = ({ username }) => {
 export default User;
 
 const UserContainer = styled.div`
-  background-color: #0019a4;
-
   width: fit-content;
   height: 100%;
   padding: 10px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   margin: 0;
-
   gap: 8px;
-
   font-weight: bold;
 `;
 

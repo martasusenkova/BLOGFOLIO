@@ -1,7 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+
 import { ThemeProvider, useTheme } from './Context';
+import { AuthProvider } from './Context/AuthContext';
+
 import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
 
 import BlogList from './components/Pages/BlogList';
@@ -17,9 +20,11 @@ import SearchResultsPage from './components/Pages/SearchResult';
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <ThemeWrapper />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <ThemeWrapper />
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

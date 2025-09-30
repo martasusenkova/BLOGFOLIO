@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
+
 import BurgerMenu from '../BurgerMenu';
 import User from '../User';
 
-const MOCK_IS_AUTHORIZED = true;
-const MOCK_USERNAME = 'Marta Susenkova';
+interface HeaderProps {
+  isMenuOpen: boolean;
+  toggleMenu: () => void;
+}
 
-const Header: React.FC = () => {
+const MOCK_IS_AUTHORIZED = true;
+export const MOCK_USERNAME = 'Marta Susenkova';
+
+const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
@@ -16,6 +22,9 @@ const Header: React.FC = () => {
     setIsSearchOpen((prev) => !prev);
     if (isSearchOpen) {
       setSearchValue('');
+    }
+    if (!isSearchOpen && isMenuOpen) {
+      toggleMenu();
     }
   };
 
@@ -25,8 +34,8 @@ const Header: React.FC = () => {
 
   return (
     <StyledHeader>
-      <BurgerMenuWrapper>
-        <BurgerMenu />
+      <BurgerMenuWrapper onClick={toggleMenu}>
+        <BurgerMenu isOpen={isMenuOpen} />
       </BurgerMenuWrapper>
 
       {isSearchOpen && (
@@ -60,7 +69,13 @@ const Header: React.FC = () => {
 
 export default Header;
 
+// --- Стили ---
 const StyledHeader = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -72,7 +87,10 @@ const StyledHeader = styled.header`
   box-sizing: border-box;
 `;
 
-const BurgerMenuWrapper = styled.div``;
+const BurgerMenuWrapper = styled.div`
+  cursor: pointer;
+  z-index: 12;
+`;
 
 interface HeaderRightSectionProps {
   isSearchOpen: boolean;
@@ -92,7 +110,7 @@ const IconBase = styled(FontAwesomeIcon)`
 
 const UserIcon = styled(IconBase)``;
 
-const UserContainerButton = styled.div`
+export const UserContainerButton = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;

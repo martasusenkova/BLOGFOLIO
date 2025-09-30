@@ -17,7 +17,7 @@ declare module 'styled-components' {
 export const lightTheme = {
   background: '#efefef',
   text: '#464646',
-  primary: '#007bff',
+  primary: '#0028aa',
   cardBorder: '#ada8a8',
   error: '#ff0000',
   inputBorder: '#a8a8a8',
@@ -31,7 +31,7 @@ export const lightTheme = {
 export const darkTheme = {
   background: '#2c2c2c',
   text: '#ffffff',
-  primary: '#0077ff',
+  primary: '#0028aa',
   cardBorder: '#efefef',
   error: '#ff5c5c',
   inputBorder: '#d0d0d0',

@@ -13,6 +13,10 @@ interface IButton {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   width?: string;
   height?: string;
+  margin?: string;
+  padding?: string;
+  borderRadius?: string;
+
   type?: 'button' | 'submit' | 'reset';
   children: React.ReactNode;
   isLiked?: boolean;
@@ -24,6 +28,9 @@ const Button: FC<IButton> = ({
   onClick,
   width,
   height,
+  margin,
+  padding,
+  borderRadius,
   type = 'button',
   children,
   isLiked,
@@ -34,6 +41,9 @@ const Button: FC<IButton> = ({
       $variant={variant}
       $width={width}
       $height={height}
+      $customMargin={margin}
+      $customPadding={padding}
+      $customBorderRadius={borderRadius}
       $isLiked={isLiked}
       $isDisliked={isDisliked}
       type={type}
@@ -50,6 +60,9 @@ const ButtonComponent = styled.button<{
   $variant: ButtonVariant;
   $width?: string;
   $height?: string;
+  $customMargin?: string;
+  $customPadding?: string;
+  $customBorderRadius?: string;
   $isLiked?: boolean;
   $isDisliked?: boolean;
 }>`
@@ -65,6 +78,22 @@ const ButtonComponent = styled.button<{
   cursor: pointer;
   width: ${({ $width }) => $width || 'auto'};
   height: ${({ $height }) => $height || 'auto'};
+  ${({ $customMargin }) =>
+    $customMargin &&
+    css`
+      margin: ${$customMargin};
+    `}
+  ${({ $customPadding }) =>
+    $customPadding &&
+    css`
+      padding: ${$customPadding};
+    `}
+
+     ${({ $customBorderRadius }) =>
+    $customBorderRadius &&
+    css`
+      border-radius: ${$customBorderRadius};
+    `}
   border: none;
   transition: all 0.2s ease;
 

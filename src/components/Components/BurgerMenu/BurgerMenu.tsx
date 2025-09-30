@@ -1,17 +1,14 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 
 interface IBurger {
   size?: number;
+  isOpen: boolean;
 }
 
-const BurgerMenu: FC<IBurger> = ({ size = 35 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleBurger = () => setIsOpen(!isOpen);
-
+const BurgerMenu: FC<IBurger> = ({ size = 35, isOpen }) => {
   return (
-    <BurgerWrapper style={{ width: size, height: size }} onClick={toggleBurger}>
+    <BurgerWrapper style={{ width: size, height: size }}>
       <Line $isOpen={isOpen} />
       <Line $isOpen={isOpen} />
       <Line $isOpen={isOpen} />

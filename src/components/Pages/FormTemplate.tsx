@@ -1,8 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, {
+  ThemeProvider as StyledThemeProvider,
+} from 'styled-components';
+
 import Title from '../Components/Title';
-import Header from '../Components/Header/Header';
-import Pagination from '../Components/Pagination/Pagination';
+import { Header } from '../Components/Header';
+import Pagination from '../Components/Pagination';
+import SideMenu from '../Components/SideMenu';
+import { useTheme } from '../../Context';
+import { useAuth } from '../../Context/AuthContext';
+import { lightTheme, darkTheme } from '../Components/ThemeToggle';
 
 interface PageProps {
   children?: React.ReactNode;
@@ -11,52 +18,67 @@ interface PageProps {
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (pageNumber: number) => void;
+  onAddPost?: () => void;
 }
 
-const FormTemplate: React.FC<PageProps> = ({
-  children,
-  title,
-  showBackButton,
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
+const FormTemplate: React.FC<PageProps> = (props) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  const { currentTheme } = useTheme();
+  const { isLoggedIn, userName, signOut, signIn, goToHome } = useAuth();
+
+  const theme = currentTheme === 'light' ? lightTheme : darkTheme;
+
   const showPagination = !!(
-    currentPage &&
-    totalPages &&
-    onPageChange &&
-    totalPages > 1
+    props.currentPage &&
+    props.totalPages &&
+    props.onPageChange &&
+    props.totalPages > 1
   );
 
   return (
-    <StyledDiv>
-      <Header />
+    <StyledThemeProvider theme={theme}>
+      <SideMenu
+        isOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
+        isLoggedIn={isLoggedIn}
+        userName={userName}
+        onLogout={signOut}
+        onSignIn={signIn}
+        goToHome={goToHome}
+        onAddPost={props.onAddPost}
+      />
 
-      <StyledMain>
-        <ContentContainer>
-          {showBackButton && <BackHomeButton>Back</BackHomeButton>}
-          <Title text={title} />
-          {children}
-        </ContentContainer>
-      </StyledMain>
+      <StyledDiv>
+        <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
 
-      {showPagination && (
-        <PaginationFooter>
-          <Pagination
-            currentPage={currentPage!}
-            totalPages={totalPages!}
-            onPageChange={onPageChange!}
-          />
-        </PaginationFooter>
-      )}
+        <StyledMain>
+          <ContentContainer>
+            {props.showBackButton && <BackHomeButton>Back</BackHomeButton>}
+            <Title text={props.title} />
+            {props.children}
+          </ContentContainer>
+        </StyledMain>
 
-      <BottomFooter>
-        <FooterContent>
-          <span>©2025 Blogfolio</span>
-          <span>All rights reserved</span>
-        </FooterContent>
-      </BottomFooter>
-    </StyledDiv>
+        {showPagination && (
+          <PaginationFooter>
+            <Pagination
+              currentPage={props.currentPage!}
+              totalPages={props.totalPages!}
+              onPageChange={props.onPageChange!}
+            />
+          </PaginationFooter>
+        )}
+
+        <BottomFooter>
+          <FooterContent>
+            <span>©2025 Blogfolio</span>
+            <span>All rights reserved</span>
+          </FooterContent>
+        </BottomFooter>
+      </StyledDiv>
+    </StyledThemeProvider>
   );
 };
 
@@ -68,6 +90,7 @@ const StyledDiv = styled.div`
   flex-direction: column;
   justify-content: space-between;
   background: ${({ theme }) => theme.background};
+  transition: background 0.3s ease;
 `;
 
 const StyledMain = styled.main`
@@ -109,7 +132,6 @@ const PaginationFooter = styled.footer`
   }
 `;
 
-/* --- Нижний футер с копирайтом --- */
 const BottomFooter = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.cardBorder};
   background: ${({ theme }) => theme.background};
