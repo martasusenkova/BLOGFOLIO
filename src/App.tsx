@@ -1,20 +1,51 @@
 import React from 'react';
-import './App.css';
-import User from './components/User';
-import Title from './components/Title';
-import Button from './components/Button';
-import Burger from './components/Burger';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { ThemeProvider, useTheme } from './Context';
+import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
+
+import BlogList from './components/Pages/BlogList';
+import SignUp from './components/Pages/SignUp';
+import Template from './components/Pages/Template';
+import PostPage from './components/Pages/PostPage';
+import SignIn from './components/Pages/SignIn';
+import Success from './components/Pages/Success';
+import RegistrationConfirmation from './components/Pages/RegistrationConfirmation';
+import HW_39 from './components/Pages/HW39';
+import SearchResultsPage from './components/Pages/SearchResult';
+
 function App() {
   return (
-    <>
-      <User username="Marta Susenkova" />
-      <Title text="Sign In" />
-      <Burger></Burger>
-      <Button variant="Primary" text="Primary"></Button>
-      <Button variant="Secondary" text="Secondary"></Button>
-      <Button variant="Secondary2" text="Secondary 2"></Button>{' '}
-    </>
+    <ThemeProvider>
+      <Router>
+        <ThemeWrapper />
+      </Router>
+    </ThemeProvider>
   );
 }
 
 export default App;
+
+const ThemeWrapper = () => {
+  const { currentTheme } = useTheme();
+  const theme = currentTheme === 'light' ? lightTheme : darkTheme;
+
+  return (
+    <StyledThemeProvider theme={theme}>
+      <Routes>
+        <Route path="/" element={<Template />} />
+        <Route path="/searchresult" element={<SearchResultsPage />} />
+        <Route path="/blog" element={<BlogList />} />
+        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/success" element={<Success />} />
+        <Route
+          path="/registration-confirmation"
+          element={<RegistrationConfirmation />}
+        />
+        <Route path="/hw39" element={<HW_39 />} />
+      </Routes>
+    </StyledThemeProvider>
+  );
+};

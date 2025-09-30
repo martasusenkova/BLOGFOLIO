@@ -1,0 +1,111 @@
+import React, { useState } from 'react';
+import FormTemplate from './FormTemplate';
+import { Input, InputContainer, InputGrid } from '../Components/Input';
+import Button from '../Components/Button';
+import styled from 'styled-components';
+
+const SignUp: React.FC = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!name || !email || !password || !confirmPassword) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setError(null);
+
+    console.log('Form submitted:', { name, email, password });
+  };
+
+  return (
+    <FormTemplate title="Sign Up" showBackButton={true}>
+      <form onSubmit={handleSubmit}>
+        <InputGrid>
+          <InputContainer>
+            <Input
+              label="Name"
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={setName}
+              autoComplete="name"
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              label="Email"
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={setEmail}
+              autoComplete="email"
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              label="Password"
+              type="password"
+              placeholder="Your password"
+              value={password}
+              onChange={setPassword}
+              autoComplete="new-password"
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              label="Confirm password"
+              type="password"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              autoComplete="new-password"
+            />
+          </InputContainer>
+
+          {error && <ErrorText>{error}</ErrorText>}
+
+          <Button variant="Primary" width="340px" type="submit">
+            {' '}
+            Sign Up{' '}
+          </Button>
+          <StyledLink>
+            Already have an account? <a href="/signin">Sign in</a>
+          </StyledLink>
+        </InputGrid>
+      </form>
+    </FormTemplate>
+  );
+};
+
+export default SignUp;
+
+export const StyledLink = styled.p`
+  all: unset;
+  margin: 0;
+  font-size: 14px;
+  color: ${({ theme }) => theme.text};
+  a {
+    color: ${({ theme }) => theme.primary};
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 700;
+  }
+`;
+
+export const ErrorText = styled.div`
+  color: red;
+  font-size: 13px;
+  margin: 6px 0 0;
+`;
