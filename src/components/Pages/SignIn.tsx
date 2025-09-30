@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import FormTemplate from './FormTemplate';
 import { Input, InputContainer, InputGrid } from '../Components/Input';
 import Button from '../Components/Button';
-import { StyledLink } from './SignUp';
 import { useAuth } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-
+import { StyledLink, StyledRouterLink } from './SignUp';
 import styled from 'styled-components';
 
 const SignIn: React.FC = () => {
@@ -90,8 +88,4 @@ const ForgotLinkTwo = styled(StyledLink)`
   align-items: center;
   gap: 4px;
   justify-content: center;
-`;
-
-export const StyledRouterLink = styled(Link)`
-  color: ${({ theme }) => theme.primary2} !important;
 `;

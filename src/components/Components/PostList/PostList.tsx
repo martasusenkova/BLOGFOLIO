@@ -11,10 +11,13 @@ interface PostListProps {
 const PostList: React.FC<PostListProps> = ({ layout }) => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const width = useWindowWidth();
+  const isComplexLayout = width >= 950;
 
   useEffect(() => {
     const loadPosts = async () => {
+      setIsLoading(true);
       try {
         const postsData = await fetchPosts();
         setPosts(postsData);
@@ -25,9 +28,13 @@ const PostList: React.FC<PostListProps> = ({ layout }) => {
       }
     };
     loadPosts();
-  }, []);
+  }, [layout]);
 
-  if (width < 950) {
+  if (isLoading) {
+    return <p>Загрузка постов...</p>;
+  }
+
+  if (!isComplexLayout) {
     const responsiveVariant = width < 768 ? 'compact' : 'vertical';
 
     return (
@@ -90,7 +97,7 @@ const PostList: React.FC<PostListProps> = ({ layout }) => {
 
 export default PostList;
 
-// --- Styled Components ---
+// --- Styled Components  ---
 
 const PostsGridContainer = styled.div<{
   $layout: 'horizontal' | 'two-vertical';

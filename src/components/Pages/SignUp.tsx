@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { StyledRouterLink } from '../Pages/SignIn';
 
 import FormTemplate from './FormTemplate';
 import { Input, InputContainer, InputGrid } from '../Components/Input';
@@ -100,6 +99,9 @@ const SignUp: React.FC = () => {
 
 export default SignUp;
 
+export const StyledRouterLink = styled(Link)`
+  color: ${({ theme }) => theme.primary2} !important;
+`;
 export const StyledLink = styled.p`
   all: unset;
   margin: 0;
