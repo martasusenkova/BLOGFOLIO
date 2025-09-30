@@ -1,3 +1,3 @@
-import Header, { UserContainerButton, MOCK_USERNAME } from './Header';
+import Header, { UserContainerButton } from './Header';
 
-export { Header, UserContainerButton, MOCK_USERNAME };
+export { Header, UserContainerButton };

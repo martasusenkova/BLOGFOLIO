@@ -1,13 +1,15 @@
-import React, { FC, ElementType } from 'react';
-import { Link } from 'react-router-dom';
+import React, { FC } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon } from '@fortawesome/free-solid-svg-icons';
 import { faSun as faSunRegular } from '@fortawesome/free-regular-svg-icons';
+
 import { useTheme } from '../../../Context';
+import { useAuth } from '../../../Context/AuthContext';
 import Button from '../Button';
 import User from '../User';
-import { UserContainerButton, MOCK_USERNAME } from '../Header';
+import { UserContainerButton } from '../Header';
 
 interface IMenuItem {
   title: string;
@@ -19,11 +21,6 @@ interface IMenuItem {
 interface ISideMenuProps {
   isOpen: boolean;
   toggleMenu: () => void;
-  isLoggedIn: boolean;
-  userName?: string;
-  onLogout: () => void;
-  onSignIn: () => void;
-  goToHome: () => void;
   onAddPost?: () => void;
 }
 
@@ -34,22 +31,37 @@ interface IMenuContainerProps {
 export const SideMenu: FC<ISideMenuProps> = ({
   isOpen,
   toggleMenu,
-  isLoggedIn,
-  userName = 'User',
-  onLogout,
-  onSignIn,
-  goToHome,
   onAddPost,
 }) => {
+  const { isLoggedIn, userName, signOut } = useAuth();
+  const navigate = useNavigate();
   const { currentTheme, toggleTheme } = useTheme();
+
+  const goToHome = () => {
+    navigate('/blog');
+  };
+
+  const handleLogout = () => {
+    signOut();
+    navigate('/blog');
+  };
+
+  const handleSignIn = () => {
+    navigate('/signin');
+  };
 
   const menuItems: IMenuItem[] = isLoggedIn
     ? [
-        { title: 'Home', onClick: goToHome, isLink: true, path: '/' },
-        { title: 'Blog', onClick: goToHome, isLink: true, path: '/blog' },
+        { title: 'Home', onClick: goToHome, isLink: true, path: '/blog' },
+        {
+          title: 'Blog',
+          onClick: () => navigate('/blog'),
+          isLink: true,
+          path: '/blog',
+        },
         {
           title: 'Search Results',
-          onClick: goToHome,
+          onClick: () => navigate('/searchresult'),
           isLink: true,
           path: '/searchresult',
         },
@@ -57,11 +69,11 @@ export const SideMenu: FC<ISideMenuProps> = ({
           ? [{ title: 'Add post', onClick: onAddPost, isLink: false }]
           : []),
       ]
-    : [{ title: 'Home', onClick: goToHome, isLink: true, path: '/' }];
+    : [{ title: 'Home', onClick: goToHome, isLink: true, path: '/blog' }];
 
   const mainAction = isLoggedIn
-    ? { title: 'Log Out', action: onLogout, path: '' }
-    : { title: 'Sign In', action: onSignIn, path: '/signin' };
+    ? { title: 'Log Out', action: handleLogout, path: '' }
+    : { title: 'Sign In', action: handleSignIn, path: '/signin' };
 
   const handleMainAction = () => {
     mainAction.action();
@@ -74,7 +86,7 @@ export const SideMenu: FC<ISideMenuProps> = ({
         {isLoggedIn && (
           <Header>
             <UserContainerButton onClick={() => {}}>
-              <User username={MOCK_USERNAME} />
+              <User username={userName || 'User'} />
             </UserContainerButton>{' '}
           </Header>
         )}

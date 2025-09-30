@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, {
   ThemeProvider as StyledThemeProvider,
 } from 'styled-components';
-
 import Title from '../Components/Title';
 import { Header } from '../Components/Header';
 import Pagination from '../Components/Pagination';
@@ -10,6 +10,7 @@ import SideMenu from '../Components/SideMenu';
 import { useTheme } from '../../Context';
 import { useAuth } from '../../Context/AuthContext';
 import { lightTheme, darkTheme } from '../Components/ThemeToggle';
+// import Button from '../Components/Button';
 
 interface PageProps {
   children?: React.ReactNode;
@@ -26,9 +27,10 @@ const FormTemplate: React.FC<PageProps> = (props) => {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const { currentTheme } = useTheme();
-  const { isLoggedIn, userName, signOut, signIn, goToHome } = useAuth();
+  const { isLoggedIn, userName, signOut, signIn } = useAuth();
 
   const theme = currentTheme === 'light' ? lightTheme : darkTheme;
+  const navigate = useNavigate();
 
   const showPagination = !!(
     props.currentPage &&
@@ -42,11 +44,6 @@ const FormTemplate: React.FC<PageProps> = (props) => {
       <SideMenu
         isOpen={isMenuOpen}
         toggleMenu={toggleMenu}
-        isLoggedIn={isLoggedIn}
-        userName={userName}
-        onLogout={signOut}
-        onSignIn={signIn}
-        goToHome={goToHome}
         onAddPost={props.onAddPost}
       />
 
@@ -55,7 +52,12 @@ const FormTemplate: React.FC<PageProps> = (props) => {
 
         <StyledMain>
           <ContentContainer>
-            {props.showBackButton && <BackHomeButton>Back</BackHomeButton>}
+            {props.showBackButton && (
+              <BackHomeButton as="button" onClick={() => navigate(-1)}>
+                Back
+              </BackHomeButton>
+            )}
+
             <Title text={props.title} />
             {props.children}
           </ContentContainer>
@@ -85,22 +87,23 @@ const FormTemplate: React.FC<PageProps> = (props) => {
 export default FormTemplate;
 
 const StyledDiv = styled.div`
-  min-height: 100vh;
+  margin-top: 60px;
+  padding: 40px 100px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: ${({ theme }) => theme.background};
   transition: background 0.3s ease;
+  box-sizing: border-box;
 `;
 
 const StyledMain = styled.main`
   background: ${({ theme }) => theme.background};
-  padding: 20px 150px;
   box-sizing: border-box;
   font-size: 20px;
   display: flex;
   flex-direction: column;
-
   @media (max-width: 1024px) {
     padding: 20px 80px;
   }
@@ -165,6 +168,8 @@ const ContentContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  width: auto;
+  height: fit-content;
   color: ${({ theme }) => theme.text};
   @media (max-width: 480px) {
     align-items: flex-start;
@@ -176,7 +181,7 @@ const BackHomeButton = styled.button`
   background: ${({ theme }) => theme.background};
   all: unset;
   cursor: pointer;
-  margin: 0 20px 0;
+  margin: 40px 20px 0;
   padding: 0 20px 0;
   display: flex;
   align-self: flex-start;

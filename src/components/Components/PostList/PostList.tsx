@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { PostCard, IPost } from '../../Components/PostCard';
 import { fetchPosts } from '../../../Api/api';
-import useWindowWidth from '../../../Hooks/UseWindowWidth';
+import useWindowWidth from '../../../Hooks/useWindowWidth';
 
 interface PostListProps {
   layout?: 'default' | 'two-vertical';

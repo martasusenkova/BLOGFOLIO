@@ -16,12 +16,10 @@ export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   border: 2px solid ${({ theme }) => theme.cardBorder};
-  height: 100px;
-  width: 300px;
+  padding: 30px 40px;
   max-width: 600px;
-  height: 300px;
-  margin: 20px auto 100px;
+  margin: 40px auto 100px;
   color: ${({ theme }) => theme.text};
 `;

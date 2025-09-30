@@ -25,21 +25,23 @@ const PostPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const fetchedPosts = await fetchPostsFull();
-        if (fetchedPosts.length > 0) {
-          setPosts(fetchedPosts);
-        } else {
-          setError('Посты не найдены');
-        }
-      } catch {
-        setError('Ошибка при загрузке постов');
-      } finally {
-        setLoading(false);
+  const loadPosts = async () => {
+    try {
+      const fetchedPosts = await fetchPostsFull();
+      if (fetchedPosts.length > 0) {
+        setPosts(fetchedPosts);
+      } else {
+        setError('Посты не найдены');
       }
-    })();
+    } catch {
+      setError('Ошибка при загрузке постов');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadPosts();
   }, []);
 
   if (loading) return <Center>Загрузка...</Center>;

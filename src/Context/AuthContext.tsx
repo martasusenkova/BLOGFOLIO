@@ -9,9 +9,8 @@ import React, {
 interface AuthContextProps {
   isLoggedIn: boolean;
   userName: string | undefined;
-  signIn: () => void;
+  signIn: (username: string, navigateCallback: () => void) => void;
   signOut: () => void;
-  goToHome: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -22,11 +21,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string | undefined>(undefined);
 
-  const signIn = useCallback(() => {
-    setIsLoggedIn(true);
-    setUserName('Marta Susenkova');
-    console.log('User signed in');
-  }, []);
+  const signIn = useCallback(
+    (username: string, navigateCallback: () => void) => {
+      setIsLoggedIn(true);
+      setUserName(username);
+      console.log(`User ${username} signed in`);
+      navigateCallback();
+    },
+    []
+  );
 
   const signOut = useCallback(() => {
     setIsLoggedIn(false);
@@ -34,14 +37,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     console.log('User signed out');
   }, []);
 
-  const goToHome = () => {
-    console.log('Navigate to Home');
-  };
-
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, userName, signIn, signOut, goToHome }}
-    >
+    <AuthContext.Provider value={{ isLoggedIn, userName, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

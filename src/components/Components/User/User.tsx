@@ -43,6 +43,7 @@ const MiniStyledUser = styled.div`
   font-weight: bold;
   font-size: 14px;
   box-sizing: border-box;
+  border-radius: 6px;
 `;
 
 const StyledUser = styled.div`

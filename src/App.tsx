@@ -9,7 +9,7 @@ import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
 
 import BlogList from './components/Pages/BlogList';
 import SignUp from './components/Pages/SignUp';
-import Template from './components/Pages/Template';
+// import Template from './components/Pages/Template';
 import PostPage from './components/Pages/PostPage';
 import SignIn from './components/Pages/SignIn';
 import Success from './components/Pages/Success';
@@ -38,7 +38,7 @@ const ThemeWrapper = () => {
   return (
     <StyledThemeProvider theme={theme}>
       <Routes>
-        <Route path="/" element={<Template />} />
+        <Route path="/blog" element={<BlogList />} />
         <Route path="/searchresult" element={<SearchResultsPage />} />
         <Route path="/blog" element={<BlogList />} />
         <Route path="/post/:id" element={<PostPage />} />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
-
+import { useAuth } from '../../../Context/AuthContext';
 import BurgerMenu from '../BurgerMenu';
 import User from '../User';
 
@@ -11,13 +11,10 @@ interface HeaderProps {
   toggleMenu: () => void;
 }
 
-const MOCK_IS_AUTHORIZED = true;
-export const MOCK_USERNAME = 'Marta Susenkova';
-
 const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-
+  const { isLoggedIn, userName, signOut } = useAuth();
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
     if (isSearchOpen) {
@@ -55,12 +52,16 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
           <IconBase icon={faSearch} onClick={handleSearchToggle} />
         )}
 
-        {MOCK_IS_AUTHORIZED ? (
-          <UserContainerButton onClick={() => {}}>
-            <User username={MOCK_USERNAME} />
+        {isLoggedIn ? (
+          <UserContainerButton onClick={signOut}>
+            {' '}
+            <User username={userName || 'User'} />{' '}
           </UserContainerButton>
         ) : (
-          <UserIcon icon={faUser} onClick={() => {}} />
+          <UserIcon
+            icon={faUser}
+            onClick={() => console.log('Navigate to Sign In')}
+          />
         )}
       </HeaderRightSection>
     </StyledHeader>
