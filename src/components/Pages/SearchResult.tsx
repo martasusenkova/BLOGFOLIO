@@ -7,15 +7,18 @@ import {
 } from '../Components/PostList/PostList';
 import { fetchPosts } from '../../Api/api';
 import FormTemplate from './FormTemplate';
+import { useLocation } from 'react-router-dom';
 
 interface SearchResultsResponse {
   results: IPost[];
   count: number;
 }
 
-const SEARCH_QUERY = 'Astronauts';
-
 const SearchResultsPage: React.FC = () => {
+  const location = useLocation();
+
+  const searchQuery = new URLSearchParams(location.search).get('query') || '';
+
   const [posts, setPosts] = useState<IPost[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
@@ -23,18 +26,20 @@ const SearchResultsPage: React.FC = () => {
   const postsPerPage = 6;
 
   useEffect(() => {
+    if (!searchQuery) {
+      setPosts([]);
+      setTotalResults(0);
+      setLoading(false);
+      return;
+    }
+
     const loadPosts = async () => {
       setLoading(true);
       try {
-        // 1. Рассчитываем смещение (offset) для запроса к серверу
         const offset = (currentPage - 1) * postsPerPage;
 
-        // 2. Запрашиваем данные с учетом пагинации и поиска
-        // ⚠️ ВАЖНО: Ваш fetchPosts должен принимать 3 аргумента (offset, limit, query)
-        const response = await fetchPosts(offset, postsPerPage, SEARCH_QUERY);
+        const response = await fetchPosts(offset, postsPerPage, searchQuery);
 
-        // ⚠️ Здесь предполагается, что response имеет поле count
-        // Если fetchPosts возвращает только IPost[], это может вызвать ошибку
         const data = response as unknown as SearchResultsResponse;
 
         setPosts(data.results);
@@ -48,7 +53,7 @@ const SearchResultsPage: React.FC = () => {
       }
     };
     loadPosts();
-  }, [currentPage]);
+  }, [currentPage, searchQuery]);
 
   const totalPages = Math.ceil(totalResults / postsPerPage);
 
@@ -59,12 +64,27 @@ const SearchResultsPage: React.FC = () => {
   };
 
   if (loading) return <Center>Загрузка результатов...</Center>;
+
+  if (!searchQuery)
+    return (
+      <FormTemplate
+        title={`Search results for '${searchQuery}' (${totalResults} found)`}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={paginate}
+      >
+        <Center>
+          Введите поисковый запрос в шапке, чтобы увидеть результаты.
+        </Center>
+      </FormTemplate>
+    );
+
   if (!loading && totalResults === 0)
-    return <Center>По запросу '{SEARCH_QUERY}' ничего не найдено.</Center>;
+    return <Center>По запросу '{searchQuery}' ничего не найдено.</Center>;
 
   return (
     <FormTemplate
-      title={`Search results for '${SEARCH_QUERY}' (${totalResults} found)`}
+      title={`Search results for '${searchQuery}' (${totalResults} found)`}
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={paginate}

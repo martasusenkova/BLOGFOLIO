@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSearch } from '../../../Hooks/useSearch';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../../Context/AuthContext';
@@ -15,6 +17,9 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const { isLoggedIn, userName, signOut } = useAuth();
+
+  const navigateToSearch = useSearch();
+
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
     if (isSearchOpen) {
@@ -28,7 +33,13 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
-
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      navigateToSearch(searchValue);
+      setIsSearchOpen(false);
+      setSearchValue('');
+    }
+  };
   return (
     <StyledHeader>
       <BurgerMenuWrapper onClick={toggleMenu}>
@@ -41,6 +52,7 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
             placeholder="Search..."
             value={searchValue}
             onChange={handleSearchChange}
+            onKeyDown={handleKeyDown}
           />
         </SearchInputContainer>
       )}
