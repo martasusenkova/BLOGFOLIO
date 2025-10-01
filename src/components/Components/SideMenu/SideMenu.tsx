@@ -54,10 +54,10 @@ export const SideMenu: FC<ISideMenuProps> = ({
     ? [
         { title: 'Home', onClick: goToHome, isLink: true, path: '/blog' },
         {
-          title: 'Blog',
-          onClick: () => navigate('/blog'),
+          title: 'Add post',
+          onClick: () => navigate('/template'),
           isLink: true,
-          path: '/blog',
+          path: '/template',
         },
         {
           title: 'Search Results',
@@ -65,9 +65,6 @@ export const SideMenu: FC<ISideMenuProps> = ({
           isLink: true,
           path: '/searchresult',
         },
-        ...(onAddPost
-          ? [{ title: 'Add post', onClick: onAddPost, isLink: false }]
-          : []),
       ]
     : [{ title: 'Home', onClick: goToHome, isLink: true, path: '/blog' }];
 

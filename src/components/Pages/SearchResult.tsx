@@ -1,47 +1,81 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { IPost, PostCard } from '../Components/PostCard';
+import {
+  SearchListWrapper,
+  PostLinkWrapper,
+} from '../Components/PostList/PostList';
 import { fetchPosts } from '../../Api/api';
 import FormTemplate from './FormTemplate';
+
+interface SearchResultsResponse {
+  results: IPost[];
+  count: number;
+}
+
+const SEARCH_QUERY = 'Astronauts';
 
 const SearchResultsPage: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const [loading, setLoading] = useState(false);
   const postsPerPage = 6;
 
   useEffect(() => {
     const loadPosts = async () => {
+      setLoading(true);
       try {
-        const postsData = await fetchPosts();
-        setPosts(postsData);
+        // 1. Рассчитываем смещение (offset) для запроса к серверу
+        const offset = (currentPage - 1) * postsPerPage;
+
+        // 2. Запрашиваем данные с учетом пагинации и поиска
+        // ⚠️ ВАЖНО: Ваш fetchPosts должен принимать 3 аргумента (offset, limit, query)
+        const response = await fetchPosts(offset, postsPerPage, SEARCH_QUERY);
+
+        // ⚠️ Здесь предполагается, что response имеет поле count
+        // Если fetchPosts возвращает только IPost[], это может вызвать ошибку
+        const data = response as unknown as SearchResultsResponse;
+
+        setPosts(data.results);
+        setTotalResults(data.count);
       } catch (err) {
-        console.error('Failed to load posts:', err);
+        console.error('Failed to load search results:', err);
+        setPosts([]);
+        setTotalResults(0);
+      } finally {
+        setLoading(false);
       }
     };
     loadPosts();
-  }, []);
+  }, [currentPage]);
 
-  const totalPages = Math.ceil(posts.length / postsPerPage);
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(totalResults / postsPerPage);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
+  if (loading) return <Center>Загрузка результатов...</Center>;
+  if (!loading && totalResults === 0)
+    return <Center>По запросу '{SEARCH_QUERY}' ничего не найдено.</Center>;
 
   return (
     <FormTemplate
-      title="Search results 'Astronauts'"
+      title={`Search results for '${SEARCH_QUERY}' (${totalResults} found)`}
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={paginate}
     >
-      <PostListWrapper>
-        {currentPosts.map((post) => (
-          <PostCardWrapper key={post.id}>
+      <SearchListWrapper>
+        {posts.map((post) => (
+          <PostLinkWrapper key={post.id} to={`/post/${post.id}`}>
             <PostCard post={post} variant="compact-reverse" />
-          </PostCardWrapper>
+          </PostLinkWrapper>
         ))}
-      </PostListWrapper>
+      </SearchListWrapper>
     </FormTemplate>
   );
 };
@@ -50,17 +84,8 @@ export default SearchResultsPage;
 
 // --- Styled Components ---
 
-const PostListWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  width: 100%;
-  margin: 0;
-`;
-
-const PostCardWrapper = styled.div`
-  padding: 0;
-  &:last-child {
-    margin-bottom: 20px;
-  }
+const Center = styled.div`
+  padding: 40px;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
 `;

@@ -20,6 +20,7 @@ interface PageProps {
   totalPages?: number;
   onPageChange?: (pageNumber: number) => void;
   onAddPost?: () => void;
+  showOnlyArrows?: boolean;
 }
 
 const FormTemplate: React.FC<PageProps> = (props) => {
@@ -69,6 +70,7 @@ const FormTemplate: React.FC<PageProps> = (props) => {
               currentPage={props.currentPage!}
               totalPages={props.totalPages!}
               onPageChange={props.onPageChange!}
+              showOnlyArrows={props.showOnlyArrows}
             />
           </PaginationFooter>
         )}
@@ -88,7 +90,7 @@ export default FormTemplate;
 
 const StyledDiv = styled.div`
   margin-top: 60px;
-  padding: 40px 100px;
+  padding: 40px 100px 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -139,7 +141,7 @@ const BottomFooter = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.cardBorder};
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
-  padding: 20px 150px;
+  padding: 16px 150px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -181,7 +183,7 @@ const BackHomeButton = styled.button`
   background: ${({ theme }) => theme.background};
   all: unset;
   cursor: pointer;
-  margin: 40px 20px 0;
+  margin: 4px 20px 0;
   padding: 0 20px 0;
   display: flex;
   align-self: flex-start;

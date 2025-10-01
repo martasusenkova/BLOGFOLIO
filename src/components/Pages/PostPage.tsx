@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../Components/Button';
 import { IPost } from '../Components/PostCard';
-import { fetchPostsFull } from '../../Api/api';
 import FormTemplate from './FormTemplate';
+import { fetchPostById, fetchPosts, ApiResponse } from '../../Api/api';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,52 +18,77 @@ import {
   MirroredIcon,
 } from '../Components/PostCard/PostCard';
 
-const POSTS_PER_PAGE = 1;
+const NAVIGATION_POST_LIMIT = 10;
 
 const PostPage: React.FC = () => {
-  const [posts, setPosts] = useState<IPost[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { postId } = useParams<{ postId: string }>();
+  const navigate = useNavigate();
+
+  const [post, setPost] = useState<IPost | null>(null);
+  const [allPostIDs, setAllPostIDs] = useState<number[]>([]);
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadPosts = async () => {
-    try {
-      const fetchedPosts = await fetchPostsFull();
-      if (fetchedPosts.length > 0) {
-        setPosts(fetchedPosts);
-      } else {
-        setError('Посты не найдены');
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      setError(null);
+
+      const currentId = Number(postId);
+
+      if (!currentId || isNaN(currentId)) {
+        setLoading(false);
+        return setError('ID поста некорректен.');
       }
-    } catch {
-      setError('Ошибка при загрузке постов');
-    } finally {
-      setLoading(false);
+
+      try {
+        const allPostsResponse = await fetchPosts(0, NAVIGATION_POST_LIMIT);
+
+        const IDs = allPostsResponse.results.map((p) => p.id);
+
+        setAllPostIDs(IDs);
+
+        const index = IDs.findIndex((id) => id === currentId);
+        setCurrentPostIndex(index >= 0 ? index + 1 : 0);
+
+        const currentPost = await fetchPostById(currentId);
+        setPost(currentPost);
+      } catch (e) {
+        setError('Ошибка при загрузке поста или пост не найден.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [postId]);
+
+  const handlePostChange = (newIndex: number) => {
+    const totalPosts = allPostIDs.length;
+
+    if (newIndex >= 1 && newIndex <= totalPosts) {
+      const newPostId = allPostIDs[newIndex - 1];
+      navigate(`/post/${newPostId}`);
     }
   };
 
-  useEffect(() => {
-    loadPosts();
-  }, []);
-
   if (loading) return <Center>Загрузка...</Center>;
-  if (posts.length === 0) return <Center>Посты не найдены</Center>;
-
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
-  const currentPost = posts[(currentPage - 1) * POSTS_PER_PAGE];
+  if (error) return <Center>{error}</Center>;
+  if (!post) return <Center>Пост не найден</Center>;
 
   return (
     <FormTemplate
-      title={currentPost.title}
-      showBackButton={false}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={setCurrentPage}
+      title={post.title}
+      showBackButton={true}
+      currentPage={currentPostIndex}
+      totalPages={allPostIDs.length}
+      onPageChange={handlePostChange}
+      showOnlyArrows={true}
     >
       <PageWrapper>
-        {currentPost.image && (
-          <HeroImage src={currentPost.image} alt={currentPost.title} />
-        )}
-        <Content dangerouslySetInnerHTML={{ __html: currentPost.text }} />
+        {post.image && <HeroImage src={post.image} alt={post.title} />}
+        <Content dangerouslySetInnerHTML={{ __html: post.text }} />
         <ActionsContainer>
           <ActionsLeft>
             <Button
@@ -104,6 +130,7 @@ const PostPage: React.FC = () => {
 export default PostPage;
 
 // --- Styled Components ---
+
 const PageWrapper = styled.main`
   max-width: 850px;
   margin: 32px auto;

@@ -48,10 +48,7 @@ const SignIn: React.FC = () => {
             />
           </InputContainer>
 
-          <ForgotLink>
-            {' '}
-            <p>Forgot password?</p>
-          </ForgotLink>
+          <ForgotLink> Forgot password?</ForgotLink>
 
           <Button variant="Primary" width="340px" type="submit">
             Sign In

@@ -16,6 +16,7 @@ import Success from './components/Pages/Success';
 import RegistrationConfirmation from './components/Pages/RegistrationConfirmation';
 import HW_39 from './components/Pages/HW39';
 import SearchResultsPage from './components/Pages/SearchResult';
+import Template from './components/Pages/Template';
 
 function App() {
   return (
@@ -41,10 +42,11 @@ const ThemeWrapper = () => {
         <Route path="/blog" element={<BlogList />} />
         <Route path="/searchresult" element={<SearchResultsPage />} />
         <Route path="/blog" element={<BlogList />} />
-        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/post/:postId" element={<PostPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/success" element={<Success />} />
+        <Route path="/template" element={<Template />} />
         <Route
           path="/registration-confirmation"
           element={<RegistrationConfirmation />}

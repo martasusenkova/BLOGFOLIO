@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { PostCard, IPost, PostVariant } from '../../Components/PostCard';
 import { fetchPosts } from '../../../Api/api';
 import useWindowWidth from '../../../Hooks/useWindowWidth';
-
+import { Link } from 'react-router-dom';
 interface PostListProps {
   layout: PostVariant;
 }
@@ -19,8 +19,10 @@ const PostList: React.FC<PostListProps> = ({ layout }) => {
     const loadPosts = async () => {
       setIsLoading(true);
       try {
-        const postsData = await fetchPosts();
-        setPosts(postsData);
+        const SEARCH_TERM = 'astronauts';
+        const postsData = await fetchPosts(0, 12, SEARCH_TERM);
+
+        setPosts(postsData.results);
       } catch (err) {
         console.error('Не удалось загрузить посты:', err);
       } finally {
@@ -39,8 +41,10 @@ const PostList: React.FC<PostListProps> = ({ layout }) => {
 
     return (
       <ResponsiveWrapper>
-        {posts.slice(0, 12).map((post) => (
-          <PostCard key={post.id} post={post} variant={responsiveVariant} />
+        {posts.map((post) => (
+          <PostLinkWrapper key={post.id} to={`/post/${post.id}`}>
+            <PostCard post={post} variant={responsiveVariant} />
+          </PostLinkWrapper>
         ))}
       </ResponsiveWrapper>
     );
@@ -53,14 +57,22 @@ const PostList: React.FC<PostListProps> = ({ layout }) => {
     return (
       <PostsGridContainer $layout="two-vertical">
         {posts.slice(0, 6).map((post, index) => (
-          <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`vertical${index + 1}`}
+          >
             <PostCard post={post} variant="vertical" />
-          </PostWrapper>
+          </PostLinkWrapper>
         ))}
         {posts.slice(6, 12).map((post, index) => (
-          <PostWrapper key={post.id} $area={`compact${index + 1}`}>
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`compact${index + 1}`}
+          >
             <PostCard post={post} variant="compact" />
-          </PostWrapper>
+          </PostLinkWrapper>
         ))}
       </PostsGridContainer>
     );
@@ -70,23 +82,36 @@ const PostList: React.FC<PostListProps> = ({ layout }) => {
     const defaultHorizontalPost = posts[0];
     const defaultVerticalPosts = posts.slice(1, 5);
     const defaultCompactPosts = posts.slice(5, 11);
-
     return (
       <PostsGridContainer $layout="horizontal">
+        {/*  Horizontal */}
         {defaultHorizontalPost && (
-          <PostWrapper $area="horizontal">
+          <PostLinkWrapper
+            to={`/post/${defaultHorizontalPost.id}`}
+            $area="horizontal"
+          >
             <PostCard post={defaultHorizontalPost} variant="horizontal" />
-          </PostWrapper>
+          </PostLinkWrapper>
         )}
+        {/* Vertical posts */}
         {defaultVerticalPosts.map((post, index) => (
-          <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`vertical${index + 1}`}
+          >
             <PostCard post={post} variant="vertical" />
-          </PostWrapper>
+          </PostLinkWrapper>
         ))}
+        {/* Compact posts */}
         {defaultCompactPosts.map((post, index) => (
-          <PostWrapper key={post.id} $area={`compact${index + 1}`}>
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`compact${index + 1}`}
+          >
             <PostCard post={post} variant="compact" />
-          </PostWrapper>
+          </PostLinkWrapper>
         ))}
       </PostsGridContainer>
     );
@@ -131,10 +156,6 @@ const PostsGridContainer = styled.div<{
         `}
 `;
 
-const PostWrapper = styled.div<{ $area?: string }>`
-  ${({ $area }) => $area && `grid-area: ${$area};`}
-`;
-
 const ResponsiveWrapper = styled.div`
   display: grid;
   gap: 10px;
@@ -145,4 +166,22 @@ const ResponsiveWrapper = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
+`;
+export const PostLinkWrapper = styled(Link)<{ $area?: string }>`
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+  cursor: pointer;
+
+  ${({ $area }) => $area && `grid-area: ${$area};`}
+`;
+export const SearchListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 0 20px;
 `;
