@@ -1,8 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-/**
- * @returns {function}
- */
 export const useSearch = () => {
   const navigate = useNavigate();
 

@@ -183,6 +183,7 @@ const BackHomeButton = styled.button`
   background: ${({ theme }) => theme.background};
   all: unset;
   cursor: pointer;
+  font-size: 16px;
   margin: 4px 20px 0;
   padding: 0 20px 0;
   display: flex;

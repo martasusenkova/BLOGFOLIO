@@ -19,7 +19,7 @@ const PostList: React.FC<PostListProps> = ({ layout }) => {
     const loadPosts = async () => {
       setIsLoading(true);
       try {
-        const SEARCH_TERM = 'astronauts';
+        const SEARCH_TERM = 'space';
         const postsData = await fetchPosts(0, 12, SEARCH_TERM);
 
         setPosts(postsData.results);

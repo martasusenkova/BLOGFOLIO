@@ -73,14 +73,19 @@ const SearchResultsPage: React.FC = () => {
         totalPages={totalPages}
         onPageChange={paginate}
       >
-        <Center>
-          Введите поисковый запрос в шапке, чтобы увидеть результаты.
-        </Center>
+        <Center>Введите поисковый запрос, чтобы увидеть результаты.</Center>
       </FormTemplate>
     );
 
   if (!loading && totalResults === 0)
-    return <Center>По запросу '{searchQuery}' ничего не найдено.</Center>;
+    return (
+      <FormTemplate
+        title={`Search results for '${searchQuery}' (${totalResults} found)`}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={paginate}
+      ></FormTemplate>
+    );
 
   return (
     <FormTemplate

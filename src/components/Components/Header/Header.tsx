@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSearch } from '../../../Hooks/useSearch';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../../Context/AuthContext';
