@@ -9,7 +9,6 @@ import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
 
 import BlogList from './components/Pages/BlogList';
 import SignUp from './components/Pages/SignUp';
-// import Template from './components/Pages/Template';
 import PostPage from './components/Pages/PostPage';
 import SignIn from './components/Pages/SignIn';
 import Success from './components/Pages/Success';
@@ -17,7 +16,7 @@ import RegistrationConfirmation from './components/Pages/RegistrationConfirmatio
 import HW_39 from './components/Pages/HW39';
 import SearchResultsPage from './components/Pages/SearchResult';
 import Template from './components/Pages/Template';
-
+import PostPreviewPopup from './core/PostPreviewPopup';
 function App() {
   return (
     <ThemeProvider>
@@ -39,7 +38,7 @@ const ThemeWrapper = () => {
   return (
     <StyledThemeProvider theme={theme}>
       <Routes>
-        <Route path="/blog" element={<BlogList />} />
+        <Route path="/" element={<BlogList />} />
         <Route path="/searchresult" element={<SearchResultsPage />} />
         <Route path="/blog" element={<BlogList />} />
         <Route path="/post/:postId" element={<PostPage />} />
@@ -53,6 +52,7 @@ const ThemeWrapper = () => {
         />
         <Route path="/hw39" element={<HW_39 />} />
       </Routes>
+      <PostPreviewPopup />
     </StyledThemeProvider>
   );
 };
