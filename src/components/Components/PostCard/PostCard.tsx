@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
-import styled, { css } from 'styled-components';
+import { useDispatch } from 'react-redux';
 
+import styled, { css } from 'styled-components';
+import { setPreviewImage } from '../../../core/PostPreview';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faThumbsUp,
@@ -40,8 +42,15 @@ export const PostCard: FC<PostCardProps> = ({
 }) => {
   const [hasError, setHasError] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleImageError = () => {
     setHasError(true);
+  };
+
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    dispatch(setPreviewImage(post.image));
   };
   return (
     <Wrapper>
@@ -52,7 +61,9 @@ export const PostCard: FC<PostCardProps> = ({
               src={hasError ? fallbackImageUrl : post.image}
               alt={post.title}
               onError={handleImageError}
-            />{' '}
+              style={{ cursor: 'pointer' }}
+              onClick={handleImageClick}
+            />
           </ImageWrapper>
         )}
         <Content $variant={variant}>
