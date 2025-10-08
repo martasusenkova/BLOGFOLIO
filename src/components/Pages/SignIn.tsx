@@ -2,16 +2,25 @@ import React, { useState } from 'react';
 import FormTemplate from './FormTemplate';
 import { Input, InputContainer, InputGrid } from '../Components/Input';
 import Button from '../Components/Button';
-import { StyledLink } from './SignUp';
+import { useAuth } from '../../Context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { StyledLink, StyledRouterLink } from './SignUp';
 import styled from 'styled-components';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const MOCK_USERNAME = 'Marta Susenkova';
+
     console.log({ email, password });
+
+    signIn(MOCK_USERNAME, () => navigate('/blog'));
   };
 
   return (
@@ -39,17 +48,15 @@ const SignIn: React.FC = () => {
             />
           </InputContainer>
 
-          <ForgotLink>
-            {' '}
-            <a href="/">Forgot password?</a>
-          </ForgotLink>
+          <ForgotLink> Forgot password?</ForgotLink>
 
           <Button variant="Primary" width="340px" type="submit">
             Sign In
           </Button>
 
           <ForgotLinkTwo>
-            Don't have an account? <a href="/signup">Sign Up</a>
+            Don't have an account?{' '}
+            <StyledRouterLink to="/signup">Sign Up</StyledRouterLink>
           </ForgotLinkTwo>
         </StyledInputGrid>
       </form>

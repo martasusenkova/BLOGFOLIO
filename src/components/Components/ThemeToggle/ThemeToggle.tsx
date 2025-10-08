@@ -5,6 +5,7 @@ declare module 'styled-components' {
     primary: string;
     cardBorder: string;
     error: string;
+    primary2: string;
     inputBorder: string;
     inputBackground: string;
     disabledBackground: string;
@@ -17,9 +18,10 @@ declare module 'styled-components' {
 export const lightTheme = {
   background: '#efefef',
   text: '#464646',
-  primary: '#007bff',
+  primary: '#0028aa',
   cardBorder: '#ada8a8',
   error: '#ff0000',
+  primary2: '#5058a4',
   inputBorder: '#a8a8a8',
   inputBackground: '#fff',
   disabledBackground: '#f2f2f2',
@@ -31,11 +33,12 @@ export const lightTheme = {
 export const darkTheme = {
   background: '#2c2c2c',
   text: '#ffffff',
-  primary: '#0077ff',
+  primary: '#0028aa',
   cardBorder: '#efefef',
   error: '#ff5c5c',
+  primary2: '#939bde',
   inputBorder: '#d0d0d0',
-  inputBackground: '#2a2a2a',
+  inputBackground: '#030202',
   disabledBackground: '#1e1e1e',
   disabledText: '#777',
   disabledBorder: '#4a4a4a',

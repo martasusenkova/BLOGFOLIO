@@ -1,16 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled, {
+  ThemeProvider as StyledThemeProvider,
+} from 'styled-components';
 import Title from '../Components/Title';
-import BurgerMenu from '../Components/BurgerMenu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSearch,
-  faSun,
-  faMoon,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import { Header } from '../Components/Header';
+import Pagination from '../Components/Pagination';
+import SideMenu from '../Components/SideMenu';
 import { useTheme } from '../../Context';
-import Pagination from '../Components/Pagination/Pagination';
+import { useAuth } from '../../Context/AuthContext';
+import { lightTheme, darkTheme } from '../Components/ThemeToggle';
 
 interface PageProps {
   children?: React.ReactNode;
@@ -19,112 +18,93 @@ interface PageProps {
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (pageNumber: number) => void;
+  onAddPost?: () => void;
+  showOnlyArrows?: boolean;
 }
 
-const FormTemplate: React.FC<PageProps> = ({
-  children,
-  title,
-  showBackButton,
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
-  const { currentTheme, toggleTheme } = useTheme();
+const FormTemplate: React.FC<PageProps> = (props) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  const { currentTheme } = useTheme();
+  const { isLoggedIn, userName, signOut, signIn } = useAuth();
+
+  const theme = currentTheme === 'light' ? lightTheme : darkTheme;
+  const navigate = useNavigate();
 
   const showPagination = !!(
-    currentPage &&
-    totalPages &&
-    onPageChange &&
-    totalPages > 1
+    props.currentPage &&
+    props.totalPages &&
+    props.onPageChange &&
+    props.totalPages > 1
   );
 
   return (
-    <StyledDiv>
-      <Header>
-        <BurgerMenu />
-        <HeaderNav>
-          <SearchIcon icon={faSearch} />
-          <ThemeToggleButton onClick={toggleTheme}>
-            <FontAwesomeIcon icon={currentTheme === 'light' ? faMoon : faSun} />
-          </ThemeToggleButton>
-          <UserIcon icon={faUser} />
-        </HeaderNav>
-      </Header>
+    <StyledThemeProvider theme={theme}>
+      <SideMenu
+        isOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
+        onAddPost={props.onAddPost}
+      />
 
-      <StyledMain>
-        <ContentContainer>
-          {showBackButton && <BackHomeButton>Back</BackHomeButton>}
-          <Title text={title} />
-          {children}
-        </ContentContainer>
-      </StyledMain>
+      <StyledDiv>
+        <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
 
-      {showPagination && (
-        <PaginationFooter>
-          <Pagination
-            currentPage={currentPage!}
-            totalPages={totalPages!}
-            onPageChange={onPageChange!}
-          />
-        </PaginationFooter>
-      )}
+        <StyledMain>
+          <ContentContainer>
+            {props.showBackButton && (
+              <BackHomeButton as="button" onClick={() => navigate(-1)}>
+                Back
+              </BackHomeButton>
+            )}
 
-      <BottomFooter>
-        <FooterContent>
-          <span>©2025 Blogfolio</span>
-          <span>All rights reserved</span>
-        </FooterContent>
-      </BottomFooter>
-    </StyledDiv>
+            <Title text={props.title} />
+            {props.children}
+          </ContentContainer>
+        </StyledMain>
+
+        {showPagination && (
+          <PaginationFooter>
+            <Pagination
+              currentPage={props.currentPage!}
+              totalPages={props.totalPages!}
+              onPageChange={props.onPageChange!}
+              showOnlyArrows={props.showOnlyArrows}
+            />
+          </PaginationFooter>
+        )}
+
+        <BottomFooter>
+          <FooterContent>
+            <span>©2025 Blogfolio</span>
+            <span>All rights reserved</span>
+          </FooterContent>
+        </BottomFooter>
+      </StyledDiv>
+    </StyledThemeProvider>
   );
 };
 
 export default FormTemplate;
 
 const StyledDiv = styled.div`
-  min-height: 100vh;
+  margin-top: 60px;
+  padding: 40px 100px 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: ${({ theme }) => theme.background};
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #0000ae;
-  color: #fff;
-  height: 50px;
-  position: relative;
-
-  @media (max-width: 768px) {
-    height: 40px;
-  }
-`;
-
-const HeaderNav = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  position: absolute;
-  right: 20px;
-
-  @media (max-width: 480px) {
-    gap: 10px;
-    right: 10px;
-  }
+  transition: background 0.3s ease;
+  box-sizing: border-box;
 `;
 
 const StyledMain = styled.main`
   background: ${({ theme }) => theme.background};
-  padding: 20px 150px;
   box-sizing: border-box;
   font-size: 20px;
   display: flex;
   flex-direction: column;
-
   @media (max-width: 1024px) {
     padding: 20px 80px;
   }
@@ -133,37 +113,6 @@ const StyledMain = styled.main`
   }
   @media (max-width: 480px) {
     padding: 10px;
-    font-size: 16px;
-  }
-`;
-
-const SearchIcon = styled(FontAwesomeIcon)`
-  cursor: pointer;
-  font-size: 20px;
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
-`;
-
-const UserIcon = styled(FontAwesomeIcon)`
-  font-size: 20px;
-  cursor: pointer;
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
-`;
-
-const ThemeToggleButton = styled.div`
-  cursor: pointer;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-
-  @media (max-width: 480px) {
     font-size: 16px;
   }
 `;
@@ -187,12 +136,11 @@ const PaginationFooter = styled.footer`
   }
 `;
 
-/* --- Нижний футер с копирайтом --- */
 const BottomFooter = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.cardBorder};
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
-  padding: 20px 150px;
+  padding: 16px 150px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -221,6 +169,8 @@ const ContentContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  width: auto;
+  height: fit-content;
   color: ${({ theme }) => theme.text};
   @media (max-width: 480px) {
     align-items: flex-start;
@@ -232,7 +182,8 @@ const BackHomeButton = styled.button`
   background: ${({ theme }) => theme.background};
   all: unset;
   cursor: pointer;
-  margin: 0 20px 0;
+  font-size: 16px;
+  margin: 4px 20px 0;
   padding: 0 20px 0;
   display: flex;
   align-self: flex-start;

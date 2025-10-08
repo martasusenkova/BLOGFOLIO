@@ -1,128 +1,139 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import { PostCard, IPost } from '../../Components/PostCard';
+import { PostCard, IPost, PostVariant } from '../../Components/PostCard';
 import { fetchPosts } from '../../../Api/api';
 import useWindowWidth from '../../../Hooks/useWindowWidth';
-
+import { Link } from 'react-router-dom';
 interface PostListProps {
-  layout?: 'default' | 'two-vertical';
+  layout: PostVariant;
 }
 
-type CardVariant =
-  | 'vertical'
-  | 'compact'
-  | 'horizontal'
-  | 'compact-reverse'
-  | undefined;
-
-const PostList: React.FC<PostListProps> = ({ layout = 'default' }) => {
+const PostList: React.FC<PostListProps> = ({ layout }) => {
   const [posts, setPosts] = useState<IPost[]>([]);
-  const [postsToRender, setPostsToRender] = useState<IPost[]>([]);
-  const [cardVariant, setCardVariant] = useState<CardVariant>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
   const width = useWindowWidth();
   const isComplexLayout = width >= 950;
+
   useEffect(() => {
     const loadPosts = async () => {
+      setIsLoading(true);
       try {
-        const postsData = await fetchPosts();
-        setPosts(postsData);
+        const SEARCH_TERM = 'space';
+        const postsData = await fetchPosts(0, 12, SEARCH_TERM);
+
+        setPosts(postsData.results);
       } catch (err) {
         console.error('Не удалось загрузить посты:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
     loadPosts();
-  }, []);
+  }, [layout]);
 
-  useEffect(() => {
-    if (posts.length === 0 || isComplexLayout) {
-      setPostsToRender([]);
-      setCardVariant(undefined);
-      return;
-    }
+  if (isLoading) {
+    return <p>Загрузка постов...</p>;
+  }
 
-    let nextPosts: IPost[] = [];
-    let nextVariant: CardVariant = undefined;
-
-    if (width < 768) {
-      nextPosts = posts.slice(0, 6);
-      nextVariant = 'compact';
-    } else if (width < 950) {
-      nextPosts = posts.slice(0, 12);
-      nextVariant = 'vertical';
-    }
-
-    setPostsToRender(nextPosts);
-    setCardVariant(nextVariant);
-  }, [posts, width, isComplexLayout]);
-
-  // --- РЕНДЕРИНГ ---
-
-  if (isComplexLayout) {
-    const defaultHorizontalPost = posts[0];
-    const defaultVerticalPosts = posts.slice(1, 5);
-    const defaultCompactPosts = posts.slice(5, 11);
+  if (!isComplexLayout) {
+    const responsiveVariant = width < 768 ? 'compact' : 'vertical';
 
     return (
-      <PostsGridContainer $layout={layout}>
-        {layout === 'default' && (
-          <>
-            {defaultHorizontalPost && (
-              <PostWrapper $area="horizontal">
-                <PostCard post={defaultHorizontalPost} variant="horizontal" />
-              </PostWrapper>
-            )}
-            {defaultVerticalPosts.map((post, index) => (
-              <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
-                <PostCard post={post} variant="vertical" />
-              </PostWrapper>
-            ))}
-            {defaultCompactPosts.map((post, index) => (
-              <PostWrapper key={post.id} $area={`compact${index + 1}`}>
-                <PostCard post={post} variant="compact" />
-              </PostWrapper>
-            ))}
-          </>
-        )}
-        {layout === 'two-vertical' && (
-          <>
-            {posts.slice(0, 6).map((post, index) => (
-              <PostWrapper key={post.id} $area={`vertical${index + 1}`}>
-                <PostCard post={post} variant="vertical" />
-              </PostWrapper>
-            ))}
-            {posts.slice(6, 12).map((post, index) => (
-              <PostWrapper key={post.id} $area={`compact${index + 1}`}>
-                <PostCard post={post} variant="compact" />
-              </PostWrapper>
-            ))}
-          </>
-        )}
+      <ResponsiveWrapper>
+        {posts.map((post) => (
+          <PostLinkWrapper key={post.id} to={`/post/${post.id}`}>
+            <PostCard post={post} variant={responsiveVariant} />
+          </PostLinkWrapper>
+        ))}
+      </ResponsiveWrapper>
+    );
+  }
+
+  const isHorizontalLayout = layout === 'horizontal';
+  const isTwoVerticalLayout = layout === 'two-vertical';
+
+  if (isTwoVerticalLayout) {
+    return (
+      <PostsGridContainer $layout="two-vertical">
+        {posts.slice(0, 6).map((post, index) => (
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`vertical${index + 1}`}
+          >
+            <PostCard post={post} variant="vertical" />
+          </PostLinkWrapper>
+        ))}
+        {posts.slice(6, 12).map((post, index) => (
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`compact${index + 1}`}
+          >
+            <PostCard post={post} variant="compact" />
+          </PostLinkWrapper>
+        ))}
       </PostsGridContainer>
     );
   }
 
-  return (
-    <ResponsiveWrapper>
-      {postsToRender.map((post) => (
-        <PostCard key={post.id} post={post} variant={cardVariant} />
-      ))}
-    </ResponsiveWrapper>
-  );
+  if (isHorizontalLayout) {
+    const defaultHorizontalPost = posts[0];
+    const defaultVerticalPosts = posts.slice(1, 5);
+    const defaultCompactPosts = posts.slice(5, 11);
+    return (
+      <PostsGridContainer $layout="horizontal">
+        {/*  Horizontal */}
+        {defaultHorizontalPost && (
+          <PostLinkWrapper
+            to={`/post/${defaultHorizontalPost.id}`}
+            $area="horizontal"
+          >
+            <PostCard post={defaultHorizontalPost} variant="horizontal" />
+          </PostLinkWrapper>
+        )}
+        {/* Vertical posts */}
+        {defaultVerticalPosts.map((post, index) => (
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`vertical${index + 1}`}
+          >
+            <PostCard post={post} variant="vertical" />
+          </PostLinkWrapper>
+        ))}
+        {/* Compact posts */}
+        {defaultCompactPosts.map((post, index) => (
+          <PostLinkWrapper
+            key={post.id}
+            to={`/post/${post.id}`}
+            $area={`compact${index + 1}`}
+          >
+            <PostCard post={post} variant="compact" />
+          </PostLinkWrapper>
+        ))}
+      </PostsGridContainer>
+    );
+  }
+
+  return null;
 };
 
 export default PostList;
 
 // --- Styled Components  ---
 
-const PostsGridContainer = styled.div<{ $layout: 'default' | 'two-vertical' }>`
+const PostsGridContainer = styled.div<{
+  $layout: 'horizontal' | 'two-vertical';
+}>`
   display: grid;
   gap: 10px;
   background: ${({ theme }) => theme.background};
   margin-bottom: 20px;
 
   ${({ $layout }) =>
-    $layout === 'default'
+    $layout === 'horizontal'
       ? css`
           grid-template-columns: 1fr 1fr 1fr;
           grid-template-areas:
@@ -145,10 +156,6 @@ const PostsGridContainer = styled.div<{ $layout: 'default' | 'two-vertical' }>`
         `}
 `;
 
-const PostWrapper = styled.div<{ $area: string }>`
-  grid-area: ${({ $area }) => $area};
-`;
-
 const ResponsiveWrapper = styled.div`
   display: grid;
   gap: 10px;
@@ -159,4 +166,22 @@ const ResponsiveWrapper = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
+`;
+export const PostLinkWrapper = styled(Link)<{ $area?: string }>`
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+  cursor: pointer;
+
+  ${({ $area }) => $area && `grid-area: ${$area};`}
+`;
+export const SearchListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 0 20px;
 `;

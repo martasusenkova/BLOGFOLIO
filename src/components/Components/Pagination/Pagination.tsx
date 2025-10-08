@@ -7,14 +7,23 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (pageNumber: number) => void;
+  showOnlyArrows?: boolean;
 }
 
 const Pagination: FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
+  showOnlyArrows = false,
 }) => {
+  const goToPrevPage = () => onPageChange(currentPage - 1);
+  const goToNextPage = () => onPageChange(currentPage + 1);
+
   const renderPageNumbers = () => {
+    if (showOnlyArrows) {
+      return null;
+    }
+
     const pageNumbers = [];
     const maxPageNumbersToShow = 3;
     let startPage = Math.max(
@@ -74,18 +83,12 @@ const Pagination: FC<PaginationProps> = ({
 
   return (
     <PaginationContainer>
-      <PageButton
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
+      <PageButton onClick={goToPrevPage} disabled={currentPage === 1}>
         <FontAwesomeIcon icon={faArrowLeft} />
         <span>prev</span>
       </PageButton>
       <PageNumbers>{renderPageNumbers()}</PageNumbers>
-      <PageButton
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
+      <PageButton onClick={goToNextPage} disabled={currentPage === totalPages}>
         <span>Next</span>
         <FontAwesomeIcon icon={faArrowRight} />
       </PageButton>

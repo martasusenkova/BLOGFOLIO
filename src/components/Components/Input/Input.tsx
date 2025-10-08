@@ -54,6 +54,7 @@ export const StyledInputWrapper = styled.div`
 
 export const Label = styled.label`
   font-weight: bold;
+  font-size: 12px;
   color: ${({ theme }) => theme.text};
 `;
 
@@ -64,8 +65,7 @@ export const ErrorText = styled.p`
 `;
 
 export const StyledInput = styled.input<{ $hasError: boolean }>`
-  padding: 8px 12px;
-  font-size: 16px;
+  padding: 6px 12px;
   border-radius: 2px;
   border: ${({ theme }) => (theme.text === '#ffffff' ? '1px' : '0')} solid
     ${({ theme }) => theme.inputBorder};
@@ -116,11 +116,11 @@ export const StyledInput = styled.input<{ $hasError: boolean }>`
 export const InputGrid = styled.div`
   background-color: ${({ theme }) => theme.background};
   border-color: ${({ theme }) => theme.cardBorder};
-  padding: 32px;
+  padding: 22px;
   border: 1px solid;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   width: fit-content;
   justify-content: center;
   align-items: flex-start;
@@ -130,6 +130,6 @@ export const InputGrid = styled.div`
 export const InputContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   color: ${({ theme }) => theme.text};
 `;

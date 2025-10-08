@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import FormTemplate from './FormTemplate';
 import { Input, InputContainer, InputGrid } from '../Components/Input';
 import Button from '../Components/Button';
@@ -10,6 +13,8 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +32,8 @@ const SignUp: React.FC = () => {
     setError(null);
 
     console.log('Form submitted:', { name, email, password });
+
+    navigate('/registration-confirmation');
   };
 
   return (
@@ -81,7 +88,8 @@ const SignUp: React.FC = () => {
             Sign Up{' '}
           </Button>
           <StyledLink>
-            Already have an account? <a href="/signin">Sign in</a>
+            Already have an account?{' '}
+            <StyledRouterLink to="/signin">Sign in</StyledRouterLink>{' '}
           </StyledLink>
         </InputGrid>
       </form>
@@ -91,6 +99,9 @@ const SignUp: React.FC = () => {
 
 export default SignUp;
 
+export const StyledRouterLink = styled(Link)`
+  color: ${({ theme }) => theme.primary2} !important;
+`;
 export const StyledLink = styled.p`
   all: unset;
   margin: 0;
