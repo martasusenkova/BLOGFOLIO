@@ -9,7 +9,6 @@ import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
 
 import BlogList from './components/Pages/BlogList';
 import SignUp from './components/Pages/SignUp';
-// import Template from './components/Pages/Template';
 import PostPage from './components/Pages/PostPage';
 import SignIn from './components/Pages/SignIn';
 import Success from './components/Pages/Success';

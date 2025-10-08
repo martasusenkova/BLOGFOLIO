@@ -10,7 +10,6 @@ import SideMenu from '../Components/SideMenu';
 import { useTheme } from '../../Context';
 import { useAuth } from '../../Context/AuthContext';
 import { lightTheme, darkTheme } from '../Components/ThemeToggle';
-// import Button from '../Components/Button';
 
 interface PageProps {
   children?: React.ReactNode;
