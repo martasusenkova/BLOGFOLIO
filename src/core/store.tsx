@@ -1,9 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import postPreviewReducer from './PostPreview';
+import favoritesReducer from './FavouritesSlice';
+import postsReducer from './PostsSlice';
+import reactionsReducer from './UserReactionsSlice';
 
 export const store = configureStore({
   reducer: {
     postPreview: postPreviewReducer,
+    posts: postsReducer,
+    favorites: favoritesReducer,
+    reactions: reactionsReducer,
   },
 });
 
