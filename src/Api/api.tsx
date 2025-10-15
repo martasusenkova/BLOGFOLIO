@@ -9,14 +9,23 @@ export interface ApiResponse {
 
 export const fetchPosts = async (
   offset: number = 0,
-  limit: number = 10,
+  limit: number = 12,
   searchQuery?: string
 ): Promise<ApiResponse> => {
-  const searchParam = searchQuery ? `&search=${searchQuery}` : '';
+  const params = new URLSearchParams();
+  params.append('limit', limit.toString());
+  params.append('offset', offset.toString());
+  params.append('author__course_group', '18');
+  if (searchQuery) params.append('search', searchQuery);
 
   try {
     const response = await fetch(
-      `https://studapi.teachmeskills.by/blog/posts/?limit=${limit}${searchParam}&offset=${offset}`
+      `https://studapi.teachmeskills.by/blog/posts/?${params.toString()}`,
+      {
+        headers: {
+          accept: 'application/json',
+        },
+      }
     );
 
     if (!response.ok) {
@@ -24,9 +33,8 @@ export const fetchPosts = async (
     }
 
     const data: ApiResponse = await response.json();
-    const allPosts = data.results;
 
-    const postsWithShortText = allPosts.map((post) => ({
+    const postsWithShortText = data.results.map((post) => ({
       ...post,
       text: (post.text && post.text.slice(0, 300) + '.') || '',
     }));

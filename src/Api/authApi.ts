@@ -39,7 +39,7 @@ export const authApi = {
       uid,
       token,
     });
-    return response.data;
+    return response.status === 204 ? { success: true } : response.data;
   },
 
   async signIn(data: SignInData): Promise<SignInResponse> {

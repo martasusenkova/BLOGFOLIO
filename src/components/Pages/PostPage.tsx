@@ -1,76 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from '../Components/Button';
-import { IPost } from '../Components/PostCard';
-import FormTemplate from './FormTemplate';
-import { fetchPostById, fetchPosts, ApiResponse } from '../../Api/api';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faThumbsUp,
   faThumbsDown,
   faBookmark,
 } from '@fortawesome/free-regular-svg-icons';
+
+import { useAppDispatch, useAppSelector } from '../../core/store/reduxHooks';
+import { loadPostById, loadPosts } from '../../core/store/PostsSlice';
+import FormTemplate from './FormTemplate';
+import Button from '../Components/Button';
 import {
   ActionsLeft,
   ActionsRight,
   MirroredIcon,
 } from '../Components/PostCard/PostCard';
 
-const NAVIGATION_POST_LIMIT = 10;
+const NAVIGATION_POST_LIMIT = 12;
 
 const PostPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const [post, setPost] = useState<IPost | null>(null);
-  const [allPostIDs, setAllPostIDs] = useState<number[]>([]);
-  const [currentPostIndex, setCurrentPostIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    selectedPost: post,
+    posts,
+    loading,
+    error,
+  } = useAppSelector((state) => state.posts);
 
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      setError(null);
-
-      const currentId = Number(postId);
-
-      if (!currentId || isNaN(currentId)) {
-        setLoading(false);
-        return setError('ID поста некорректен.');
-      }
-
-      try {
-        const allPostsResponse = await fetchPosts(0, NAVIGATION_POST_LIMIT);
-
-        const IDs = allPostsResponse.results.map((p) => p.id);
-
-        setAllPostIDs(IDs);
-
-        const index = IDs.findIndex((id) => id === currentId);
-        setCurrentPostIndex(index >= 0 ? index + 1 : 0);
-
-        const currentPost = await fetchPostById(currentId);
-        setPost(currentPost);
-      } catch (e) {
-        setError('Ошибка при загрузке поста или пост не найден.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [postId]);
+    if (postId) {
+      dispatch(loadPostById(Number(postId)));
+      dispatch(loadPosts({ offset: 0, limit: NAVIGATION_POST_LIMIT }));
+    }
+  }, [postId, dispatch]);
 
   const handlePostChange = (newIndex: number) => {
-    const totalPosts = allPostIDs.length;
-
-    if (newIndex >= 1 && newIndex <= totalPosts) {
-      const newPostId = allPostIDs[newIndex - 1];
-      navigate(`/post/${newPostId}`);
-    }
+    const ids = posts.map((p) => p.id);
+    const newPostId = ids[newIndex];
+    if (newPostId) navigate(`/post/${newPostId}`);
   };
 
   if (loading) return <Center>Загрузка...</Center>;
@@ -81,8 +53,8 @@ const PostPage: React.FC = () => {
     <FormTemplate
       title={post.title}
       showBackButton={true}
-      currentPage={currentPostIndex}
-      totalPages={allPostIDs.length}
+      currentPage={posts.findIndex((p) => p.id === post.id) + 1}
+      totalPages={posts.length}
       onPageChange={handlePostChange}
       showOnlyArrows={true}
     >
@@ -94,17 +66,16 @@ const PostPage: React.FC = () => {
             <Button
               variant="Icon"
               isLiked={true}
-              onClick={() => console.log('Like clicked')}
+              onClick={() => console.log('Like')}
               width="40px"
               height="40px"
             >
               <FontAwesomeIcon icon={faThumbsUp} />
             </Button>
-
             <Button
               variant="Icon"
               isDisliked={true}
-              onClick={() => console.log('Dislike clicked')}
+              onClick={() => console.log('Dislike')}
               width="40px"
               height="40px"
             >
@@ -114,7 +85,7 @@ const PostPage: React.FC = () => {
           <ActionsRight>
             <Button
               variant="IconWithText"
-              onClick={() => console.log('Add to bookmark clicked')}
+              onClick={() => console.log('Bookmark')}
               height="40px"
             >
               Add to bookmarks
@@ -130,43 +101,29 @@ const PostPage: React.FC = () => {
 export default PostPage;
 
 // --- Styled Components ---
-
 const PageWrapper = styled.main`
   max-width: 850px;
   margin: 32px auto;
   padding: 0 20px;
-  color: ${({ theme }) => theme.text};
 `;
-
 const Center = styled.div`
   padding: 40px;
   text-align: center;
 `;
-
 const HeroImage = styled.img`
   width: 100%;
   border-radius: 8px;
   margin-bottom: 20px;
 `;
-
 const Content = styled.article`
-  display: flex;
-  flex-direction: column;
-  font-family: Arial, sans-serif;
   font-size: 18px;
   line-height: 1.8;
-  color: ${({ theme }) => theme.text};
   text-align: justify;
   padding: 0 34px;
-  p {
-    margin-bottom: 20px;
-  }
 `;
-
 const ActionsContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-top: 20px;
   padding: 0 34px;
 `;
