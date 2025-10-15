@@ -1,3 +1,3 @@
-import Header, { UserContainerButton } from './Header';
+import Header from './Header';
 
-export { Header, UserContainerButton };
+export { Header };

@@ -6,7 +6,7 @@ import { ThemeProvider, useTheme } from './Context';
 import { AuthProvider } from './Context/AuthContext';
 
 import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
-
+import ActivateUser from './components/Pages/ActivateUser';
 import BlogList from './components/Pages/BlogList';
 import SignUp from './components/Pages/SignUp';
 import PostPage from './components/Pages/PostPage';
@@ -44,6 +44,8 @@ const ThemeWrapper = () => {
         <Route path="/post/:postId" element={<PostPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/activate/:uid/:token" element={<ActivateUser />} />
+
         <Route path="/success" element={<Success />} />
         <Route path="/template" element={<Template />} />
         <Route
