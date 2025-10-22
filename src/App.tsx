@@ -44,7 +44,7 @@ const ThemeWrapper = () => {
         <Route path="/post/:postId" element={<PostPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/activate/:uid/:token" element={<ActivateUser />} />
+        <Route path="/activate/:uid" element={<ActivateUser />} />
 
         <Route path="/success" element={<Success />} />
         <Route path="/template" element={<Template />} />
