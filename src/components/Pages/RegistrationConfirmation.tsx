@@ -1,19 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FormTemplate from './FormTemplate';
 import Button from '../Components/Button';
+import styled from 'styled-components';
 import { ContentContainer } from './Template';
+import { RootState } from '../../core/store/store';
 
-const RegistrationConfirmation: React.FC = () => {
+const RegistrationConfirmation = () => {
   const navigate = useNavigate();
-
-  const handleGoHome = () => {
-    navigate('/success');
-  };
+  const { userEmail } = useSelector((state: RootState) => state.auth);
 
   return (
-    <FormTemplate title="Registration Confirmation" showBackButton={true}>
+    <FormTemplate title="Registration Confirmation" showBackButton>
       <ContentContainer>
         <ConfirmationMessage>
           <h1>Registration Successful!</h1>
@@ -21,11 +20,12 @@ const RegistrationConfirmation: React.FC = () => {
             Thank you for registering. You have successfully created your
             account.
           </p>
-          <p>Go to your email@email.com and confirm it.</p>
+          <p>
+            Please confirm your email: <strong>{userEmail}</strong>
+          </p>
         </ConfirmationMessage>
 
-        <Button variant="Primary" width="100%" onClick={handleGoHome}>
-          {' '}
+        <Button variant="Primary" width="100%" onClick={() => navigate('/')}>
           Go Home
         </Button>
       </ContentContainer>
@@ -38,13 +38,11 @@ export default RegistrationConfirmation;
 const ConfirmationMessage = styled.div`
   text-align: center;
   margin-bottom: 20px;
-
   h1 {
     font-size: 20px;
     color: #373737;
     margin-bottom: 10px;
   }
-
   p {
     font-size: 14px;
     color: ${({ theme }) => theme.text};

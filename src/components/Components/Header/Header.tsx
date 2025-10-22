@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSearch } from '../../../Hooks/useSearch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../../Context/AuthContext';
 import BurgerMenu from '../BurgerMenu';
 import User from '../User';
+import { useSearch } from '../../../Hooks/useSearch';
 
 interface HeaderProps {
   isMenuOpen: boolean;
@@ -15,36 +15,36 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const { isLoggedIn, userName, signOut } = useAuth();
+  const { user } = useAuth(); // теперь используем просто user
 
   const navigateToSearch = useSearch();
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
-    if (isSearchOpen) {
-      setSearchValue('');
-    }
-    if (!isSearchOpen && isMenuOpen) {
-      toggleMenu();
-    }
+    if (!isSearchOpen && isMenuOpen) toggleMenu();
+    if (isSearchOpen) setSearchValue('');
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
   };
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
       navigateToSearch(searchValue);
       setIsSearchOpen(false);
       setSearchValue('');
     }
   };
+
   return (
     <StyledHeader>
+      {/* Бургер-меню */}
       <BurgerMenuWrapper onClick={toggleMenu}>
         <BurgerMenu isOpen={isMenuOpen} />
       </BurgerMenuWrapper>
 
+      {/* Поиск */}
       {isSearchOpen && (
         <SearchInputContainer>
           <SearchInput
@@ -56,23 +56,19 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
         </SearchInputContainer>
       )}
 
+      {/* Правая часть хедера */}
       <HeaderRightSection isSearchOpen={isSearchOpen}>
-        {isSearchOpen ? (
-          <IconBase icon={faTimes} onClick={handleSearchToggle} />
-        ) : (
-          <IconBase icon={faSearch} onClick={handleSearchToggle} />
-        )}
+        <IconBase
+          icon={isSearchOpen ? faTimes : faSearch}
+          onClick={handleSearchToggle}
+        />
 
-        {isLoggedIn ? (
-          <UserContainerButton onClick={signOut}>
-            {' '}
-            <User username={userName || 'User'} />{' '}
-          </UserContainerButton>
+        {user ? (
+          <UserContainer>
+            <User username={user} />
+          </UserContainer>
         ) : (
-          <UserIcon
-            icon={faUser}
-            onClick={() => console.log('Navigate to Sign In')}
-          />
+          <UserIcon icon={faUser} />
         )}
       </HeaderRightSection>
     </StyledHeader>
@@ -87,7 +83,6 @@ const StyledHeader = styled.header`
   top: 0;
   left: 0;
   z-index: 10;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -122,11 +117,10 @@ const IconBase = styled(FontAwesomeIcon)`
 
 const UserIcon = styled(IconBase)``;
 
-export const UserContainerButton = styled.div`
-  cursor: pointer;
+const UserContainer = styled.div`
   display: flex;
   align-items: center;
-  height: 100%;
+  padding: 0 10px;
 `;
 
 const SearchInputContainer = styled.div`

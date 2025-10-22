@@ -19,6 +19,7 @@ interface IButton {
 
   type?: 'button' | 'submit' | 'reset';
   children: React.ReactNode;
+  disabled?: boolean;
   isLiked?: boolean;
   isDisliked?: boolean;
 }

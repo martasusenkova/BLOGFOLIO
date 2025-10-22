@@ -2,25 +2,49 @@ import React, { useState } from 'react';
 import FormTemplate from './FormTemplate';
 import { Input, InputContainer, InputGrid } from '../Components/Input';
 import Button from '../Components/Button';
-import { useAuth } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { StyledLink, StyledRouterLink } from './SignUp';
 import styled from 'styled-components';
+import { useAuth } from '../../Context/AuthContext';
+
+interface SignInData {
+  email: string;
+  password: string;
+}
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { signIn } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { signIn } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
-    const MOCK_USERNAME = 'Marta Susenkova';
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
 
-    console.log({ email, password });
+    setLoading(true);
 
-    signIn(MOCK_USERNAME, () => navigate('/blog'));
+    try {
+      await signIn({ email, password }, () => {
+        navigate('/blog');
+      });
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError('Invalid email or password');
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,10 +72,15 @@ const SignIn: React.FC = () => {
             />
           </InputContainer>
 
-          <ForgotLink> Forgot password?</ForgotLink>
+          {error && <ErrorText>{error}</ErrorText>}
 
-          <Button variant="Primary" width="340px" type="submit">
-            Sign In
+          <Button
+            variant="Primary"
+            width="340px"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Sign In'}
           </Button>
 
           <ForgotLinkTwo>
@@ -66,15 +95,9 @@ const SignIn: React.FC = () => {
 
 export default SignIn;
 
+// --- Стили ---
 const StyledInputGrid = styled(InputGrid)`
   gap: 10px;
-`;
-
-const ForgotLink = styled(StyledLink)`
-  margin: 0 0 5px;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
 `;
 
 const ForgotLinkTwo = styled(StyledLink)`
@@ -85,4 +108,10 @@ const ForgotLinkTwo = styled(StyledLink)`
   align-items: center;
   gap: 4px;
   justify-content: center;
+`;
+
+const ErrorText = styled.div`
+  color: red;
+  font-size: 13px;
+  margin: 6px 0 0;
 `;

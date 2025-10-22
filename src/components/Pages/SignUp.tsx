@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../../core/store/auth/authThunks';
+import { useNavigate } from 'react-router-dom';
 import FormTemplate from './FormTemplate';
 import { Input, InputContainer, InputGrid } from '../Components/Input';
 import Button from '../Components/Button';
-import styled from 'styled-components';
+import { RootState } from '../../core/store/store';
+import { AppDispatch } from '../../core/store/store';
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const {
+    isRegistered,
+    loading,
+    error: serverError,
+  } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (isRegistered) navigate('/registration-confirmation');
+  }, [isRegistered, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
     if (!name || !email || !password || !confirmPassword) {
       setError('Please fill in all fields');
@@ -29,67 +44,77 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    setError(null);
+    try {
+      const resultAction = await dispatch(
+        registerUser({
+          username: name,
+          email,
+          password,
+          course_group: 18,
+        })
+      );
 
-    console.log('Form submitted:', { name, email, password });
-
-    navigate('/registration-confirmation');
+      if (registerUser.rejected.match(resultAction)) {
+        const serverMessage =
+          typeof resultAction.payload === 'string'
+            ? resultAction.payload
+            : JSON.stringify(resultAction.payload);
+        setError(serverMessage || 'Registration failed');
+      }
+    } catch (err) {
+      setError('Unexpected error. Please try again.');
+    }
   };
 
   return (
-    <FormTemplate title="Sign Up" showBackButton={true}>
+    <FormTemplate title="Sign Up" showBackButton>
       <form onSubmit={handleSubmit}>
         <InputGrid>
           <InputContainer>
-            <Input
-              label="Name"
-              type="text"
-              placeholder="Your name"
-              value={name}
-              onChange={setName}
-              autoComplete="name"
-            />
+            <Input label="Name" type="text" value={name} onChange={setName} />
           </InputContainer>
           <InputContainer>
             <Input
               label="Email"
               type="email"
-              placeholder="Your email"
               value={email}
               onChange={setEmail}
-              autoComplete="email"
             />
           </InputContainer>
           <InputContainer>
             <Input
               label="Password"
               type="password"
-              placeholder="Your password"
               value={password}
               onChange={setPassword}
-              autoComplete="new-password"
             />
           </InputContainer>
           <InputContainer>
             <Input
               label="Confirm password"
               type="password"
-              placeholder="Confirm password"
               value={confirmPassword}
               onChange={setConfirmPassword}
-              autoComplete="new-password"
             />
           </InputContainer>
 
-          {error && <ErrorText>{error}</ErrorText>}
+          {/* Показываем ошибки */}
+          {(error || serverError) && (
+            <ErrorText>{error || serverError}</ErrorText>
+          )}
 
-          <Button variant="Primary" width="340px" type="submit">
-            {' '}
-            Sign Up{' '}
+          <Button
+            variant="Primary"
+            width="340px"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Sign Up'}
           </Button>
+
           <StyledLink>
             Already have an account?{' '}
-            <StyledRouterLink to="/signin">Sign in</StyledRouterLink>{' '}
+            <StyledRouterLink to="/signin">Sign In</StyledRouterLink>
           </StyledLink>
         </InputGrid>
       </form>

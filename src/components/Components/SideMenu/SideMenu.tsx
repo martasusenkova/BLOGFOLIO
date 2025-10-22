@@ -9,7 +9,6 @@ import { useTheme } from '../../../Context';
 import { useAuth } from '../../../Context/AuthContext';
 import Button from '../Button';
 import User from '../User';
-import { UserContainerButton } from '../Header';
 
 interface IMenuItem {
   title: string;
@@ -82,9 +81,9 @@ export const SideMenu: FC<ISideMenuProps> = ({
       <MenuContainer $isOpen={isOpen}>
         {isLoggedIn && (
           <Header>
-            <UserContainerButton onClick={() => {}}>
+            <UserContainer>
               <User username={userName || 'User'} />
-            </UserContainerButton>{' '}
+            </UserContainer>
           </Header>
         )}
 
@@ -197,6 +196,11 @@ const Header = styled.div`
   align-items: center;
   justify-content: flex-start;
   height: 40px;
+`;
+const UserContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
 `;
 
 const MenuList = styled.div`
