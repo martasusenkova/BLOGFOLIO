@@ -17,8 +17,10 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, isAuthLoaded } = useAuth();
   const navigateToSearch = useSearch();
+
+  if (!isAuthLoaded) return null;
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);

@@ -7,11 +7,6 @@ import { StyledLink, StyledRouterLink } from './SignUp';
 import styled from 'styled-components';
 import { useAuth } from '../../Context/AuthContext';
 
-interface SignInData {
-  email: string;
-  password: string;
-}
-
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,8 +14,9 @@ const SignIn: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signIn, isAuthLoaded } = useAuth();
 
+  if (!isAuthLoaded) return <div>Loading...</div>;
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -33,15 +29,10 @@ const SignIn: React.FC = () => {
     setLoading(true);
 
     try {
-      await signIn({ email, password }, () => {
-        navigate('/blog');
-      });
+      await signIn({ email, password });
+      navigate('/blog');
     } catch (err: any) {
-      if (err.response?.status === 401) {
-        setError('Invalid email or password');
-      } else {
-        setError('Something went wrong. Please try again.');
-      }
+      setError(err?.response?.data?.message || 'Invalid email or password');
     } finally {
       setLoading(false);
     }
