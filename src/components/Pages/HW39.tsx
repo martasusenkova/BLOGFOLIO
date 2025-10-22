@@ -24,8 +24,6 @@ const HW_39: React.FC = () => {
     <FormTemplate title="HW 39" showBackButton={false}>
       <Tabs tabs={tabsData} activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <User username="Marta Susenkova" />
-
       <Button variant="Primary">Primary</Button>
       <Button variant="Secondary">Secondary</Button>
       <Button variant="Secondary2">Secondary 2</Button>

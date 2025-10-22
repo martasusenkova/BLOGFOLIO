@@ -5,6 +5,7 @@ import { faSearch, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../../Context/AuthContext';
 import BurgerMenu from '../BurgerMenu';
 import User from '../User';
+import ProfileModal from '../ProfileModal';
 import { useSearch } from '../../../Hooks/useSearch';
 
 interface HeaderProps {
@@ -15,8 +16,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const { user } = useAuth(); // теперь используем просто user
-
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { user } = useAuth();
   const navigateToSearch = useSearch();
 
   const handleSearchToggle = () => {
@@ -37,47 +38,55 @@ const Header: React.FC<HeaderProps> = ({ isMenuOpen, toggleMenu }) => {
     }
   };
 
+  const username = user ? user.split('@')[0] : '';
+
   return (
-    <StyledHeader>
-      {/* Бургер-меню */}
-      <BurgerMenuWrapper onClick={toggleMenu}>
-        <BurgerMenu isOpen={isMenuOpen} />
-      </BurgerMenuWrapper>
+    <>
+      <StyledHeader>
+        <BurgerMenuWrapper onClick={toggleMenu}>
+          <BurgerMenu isOpen={isMenuOpen} />
+        </BurgerMenuWrapper>
 
-      {/* Поиск */}
-      {isSearchOpen && (
-        <SearchInputContainer>
-          <SearchInput
-            placeholder="Search..."
-            value={searchValue}
-            onChange={handleSearchChange}
-            onKeyDown={handleKeyDown}
-          />
-        </SearchInputContainer>
-      )}
-
-      {/* Правая часть хедера */}
-      <HeaderRightSection isSearchOpen={isSearchOpen}>
-        <IconBase
-          icon={isSearchOpen ? faTimes : faSearch}
-          onClick={handleSearchToggle}
-        />
-
-        {user ? (
-          <UserContainer>
-            <User username={user} />
-          </UserContainer>
-        ) : (
-          <UserIcon icon={faUser} />
+        {isSearchOpen && (
+          <SearchInputContainer>
+            <SearchInput
+              placeholder="Search..."
+              value={searchValue}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+            />
+          </SearchInputContainer>
         )}
-      </HeaderRightSection>
-    </StyledHeader>
+
+        <HeaderRightSection isSearchOpen={isSearchOpen}>
+          <IconBase
+            icon={isSearchOpen ? faTimes : faSearch}
+            onClick={handleSearchToggle}
+          />
+
+          {user ? (
+            <UserContainer onClick={() => setIsProfileOpen(true)}>
+              <User username={username} />
+            </UserContainer>
+          ) : (
+            <UserIcon icon={faUser} onClick={() => setIsProfileOpen(true)} />
+          )}
+        </HeaderRightSection>
+      </StyledHeader>
+
+      {isProfileOpen && user && (
+        <ProfileModal
+          username={username}
+          email={user}
+          onClose={() => setIsProfileOpen(false)}
+        />
+      )}
+    </>
   );
 };
 
 export default Header;
 
-// --- Стили ---
 const StyledHeader = styled.header`
   position: fixed;
   top: 0;
@@ -85,13 +94,13 @@ const StyledHeader = styled.header`
   z-index: 10;
   display: flex;
   justify-content: space-between;
+  box-sizing: border-box;
   align-items: center;
   padding: 10px 20px;
   background-color: #0019a4;
   color: #fff;
   height: 60px;
   width: 100%;
-  box-sizing: border-box;
 `;
 
 const BurgerMenuWrapper = styled.div`
@@ -107,6 +116,14 @@ const HeaderRightSection = styled.div<HeaderRightSectionProps>`
   display: flex;
   align-items: center;
   gap: ${(props) => (props.isSearchOpen ? '5px' : '15px')};
+  flex-shrink: 0;
+`;
+
+const UserContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  flex-shrink: 0;
 `;
 
 const IconBase = styled(FontAwesomeIcon)`
@@ -117,15 +134,9 @@ const IconBase = styled(FontAwesomeIcon)`
 
 const UserIcon = styled(IconBase)``;
 
-const UserContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-`;
-
 const SearchInputContainer = styled.div`
   flex-grow: 1;
-  margin: 0 20px;
+  margin: 0 10px;
   height: 40px;
   background-color: #5c6bc0;
   border-radius: 4px;

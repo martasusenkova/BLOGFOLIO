@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import React, { FC } from 'react';
+import styled from 'styled-components';
 
 interface IUser {
   username: string;
@@ -22,15 +22,9 @@ const User: FC<IUser> = ({ username }) => {
 export default User;
 
 const UserContainer = styled.div`
-  width: fit-content;
-  height: 100%;
-  padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 0;
   gap: 8px;
-  font-weight: bold;
 `;
 
 const MiniStyledUser = styled.div`
@@ -42,7 +36,6 @@ const MiniStyledUser = styled.div`
   justify-content: center;
   font-weight: bold;
   font-size: 14px;
-  box-sizing: border-box;
   border-radius: 6px;
 `;
 
@@ -50,5 +43,4 @@ const StyledUser = styled.div`
   color: white;
   font-size: 16px;
   font-weight: normal;
-  padding: 0 15px;
 `;
