@@ -9,6 +9,7 @@ import { ThemeProvider, useTheme } from './Context';
 import { AuthProvider } from './Context/AuthContext';
 
 import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
+import AddPostPage from './components/Pages/AddPostPage';
 import ActivateUser from './components/Pages/ActivateUser';
 import BlogList from './components/Pages/BlogList';
 import SignUp from './components/Pages/SignUp';
@@ -18,7 +19,6 @@ import Success from './components/Pages/Success';
 import RegistrationConfirmation from './components/Pages/RegistrationConfirmation';
 import HW_39 from './components/Pages/HW39';
 import SearchResultsPage from './components/Pages/SearchResult';
-import Template from './components/Pages/Template';
 import PostPreviewPopup from './core/PostPreviewPopup';
 
 function App() {
@@ -61,7 +61,7 @@ const AppContent = () => {
           element={<RegistrationConfirmation />}
         />
         <Route path="/hw39" element={<HW_39 />} />
-        <Route path="/template" element={<Template />} />
+        <Route path="/template" element={<AddPostPage />} />
       </Routes>
       <PostPreviewPopup />
     </StyledThemeProvider>
