@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import FormTemplate from './FormTemplate';
-import { Input, InputContainer, InputGrid } from '../Components/Input';
-import Button from '../Components/Button';
+import FormTemplate from '../FormTemplate';
+import { Input, InputContainer, InputGrid } from '../../Components/Input';
+import Button from '../../Components/Button';
 import { useNavigate } from 'react-router-dom';
-import { StyledLink, StyledRouterLink } from './SignUp';
+import { StyledLink, StyledRouterLink } from '../SignUp';
 import styled from 'styled-components';
-import { useAuth } from '../../Context/AuthContext';
+import { useAuth } from '../../../Context/AuthContext';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');

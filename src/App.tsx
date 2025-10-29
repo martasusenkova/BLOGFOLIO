@@ -9,16 +9,16 @@ import { ThemeProvider, useTheme } from './Context';
 import { AuthProvider } from './Context/AuthContext';
 
 import { lightTheme, darkTheme } from './components/Components/ThemeToggle';
-import AddPostPage from './components/Pages/AddPostPage';
-import ActivateUser from './components/Pages/ActivateUser';
-import BlogList from './components/Pages/BlogList';
-import SignUp from './components/Pages/SignUp';
-import PostPage from './components/Pages/PostPage';
-import SignIn from './components/Pages/SignIn';
-import Success from './components/Pages/Success';
-import RegistrationConfirmation from './components/Pages/RegistrationConfirmation';
-import HW_39 from './components/Pages/HW39';
-import SearchResultsPage from './components/Pages/SearchResult';
+import AddPostPage from './components/pages/AddPostPage';
+import ActivateUser from './components/pages/ActivateUser';
+import BlogList from './components/pages/BlogList';
+import SignUp from './components/pages/SignUp';
+import PostPage from './components/pages/PostPage';
+import SignIn from './components/pages/SignIn';
+import Success from './components/pages/Success';
+import RegistrationConfirmation from './components/pages/RegistrationConfirmation';
+import HW_39 from './components/pages/HW39';
+import SearchResultsPage from './components/pages/SearchResult';
 import PostPreviewPopup from './core/PostPreviewPopup';
 
 function App() {

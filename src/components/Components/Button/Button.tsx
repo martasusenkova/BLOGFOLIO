@@ -36,6 +36,7 @@ const Button: FC<IButton> = ({
   children,
   isLiked,
   isDisliked,
+  disabled,
 }) => {
   return (
     <ButtonComponent
@@ -49,7 +50,9 @@ const Button: FC<IButton> = ({
       $isDisliked={isDisliked}
       type={type}
       onClick={onClick}
+      disabled={disabled}
     >
+      {' '}
       {children}
     </ButtonComponent>
   );

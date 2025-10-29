@@ -1,5 +1,5 @@
 import React from 'react';
-import FormTemplate from '../Pages/FormTemplate';
+import FormTemplate from '../pages/FormTemplate';
 import AddPostForm from '../Components/AddPostForm';
 
 const AddPostPage: React.FC = () => {
