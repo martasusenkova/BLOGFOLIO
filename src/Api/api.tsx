@@ -7,6 +7,8 @@ export interface ApiResponse {
   results: IPost[];
 }
 
+const BASE_URL = 'https://studapi.teachmeskills.by/';
+
 export const fetchPosts = async (
   offset: number = 0,
   limit: number = 12,
@@ -16,15 +18,14 @@ export const fetchPosts = async (
   params.append('limit', limit.toString());
   params.append('offset', offset.toString());
   params.append('author__course_group', '18');
+  params.append('ordering', '-id');
   if (searchQuery) params.append('search', searchQuery);
 
   try {
     const response = await fetch(
-      `https://studapi.teachmeskills.by/blog/posts/?${params.toString()}`,
+      `${BASE_URL}blog/posts/?${params.toString()}`,
       {
-        headers: {
-          accept: 'application/json',
-        },
+        headers: { accept: 'application/json' },
       }
     );
 
@@ -51,9 +52,7 @@ export const fetchPosts = async (
 
 export const fetchPostById = async (id: number): Promise<IPost> => {
   try {
-    const response = await fetch(
-      `https://studapi.teachmeskills.by/blog/posts/${id}/`
-    );
+    const response = await fetch(`${BASE_URL}blog/posts/${id}/`);
 
     if (!response.ok) {
       throw new Error(`Пост с ID ${id} не найден (Статус: ${response.status})`);

@@ -24,6 +24,14 @@ export interface SignInResponse {
   refresh: string;
 }
 
+export interface ActivateResponse {
+  success: boolean;
+}
+
+export interface RefreshResponse {
+  access: string;
+}
+
 export const authApi = {
   async registerUser(userData: RegisterUserData): Promise<RegisterResponse> {
     const response = await axios.post<RegisterResponse>(
@@ -33,13 +41,10 @@ export const authApi = {
     return response.data;
   },
 
-  async activateUser(uid?: string, token?: string) {
+  async activateUser(uid?: string, token?: string): Promise<ActivateResponse> {
     if (!uid || !token) throw new Error('UID or token missing');
-    const response = await axios.post(`${BASE_URL}auth/users/activation/`, {
-      uid,
-      token,
-    });
-    return response.status === 204 ? { success: true } : response.data;
+    await axios.post(`${BASE_URL}auth/users/activation/`, { uid, token });
+    return { success: true };
   },
 
   async signIn(data: SignInData): Promise<SignInResponse> {
@@ -48,5 +53,17 @@ export const authApi = {
       data
     );
     return response.data;
+  },
+
+  async refreshToken(data: { refresh: string }): Promise<RefreshResponse> {
+    const response = await fetch(`${BASE_URL}auth/jwt/refresh/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) throw new Error('Failed to refresh token');
+    const json = await response.json();
+    return json as RefreshResponse;
   },
 };

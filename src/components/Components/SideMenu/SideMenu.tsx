@@ -82,7 +82,7 @@ export const SideMenu: FC<ISideMenuProps> = ({
         {isLoggedIn && (
           <Header>
             <UserContainer>
-              <User username={userName || 'User'} />
+              <User username={userName ? userName.split('@')[0] : 'User'} />
             </UserContainer>
           </Header>
         )}
